@@ -2,6 +2,10 @@ define([
     'app/util/ajax'
 ], function(Ajax) {
     return {
+        // 加载七牛token
+        getQiniuToken() {
+            return Ajax.get("807900");
+        },
         // 获取微信sdk初始化的参数
         getInitWXSDKConfig() {
             return Ajax.get("807910", {
@@ -20,7 +24,7 @@ define([
             return Ajax.post(sendCode, {
                 bizType,
                 mobile,
-                "kind": "f1"
+                "kind": "f2"
             });
         },
         // 获取转化汇率
@@ -30,20 +34,22 @@ define([
                 toCurrency
             });
         },
-        // 分页查询系统公告
-        getPageSysNotice(start, limit, refresh) {
+        /**
+         * 分页查询系统公告
+         * @param config {start, limit}
+         */
+        getPageSysNotice(config, refresh) {
             return Ajax.get("804040", {
-                start,
-                limit,
                 "pushType": 41,
-                "toKind": 1,
+                "toKind": 2,
                 "channelType": 4,
                 "status": 1,
-                "fromSystemCode": SYSTEM_CODE
+                "fromSystemCode": SYSTEM_CODE,
+                ...config
             }, refresh);
         },
         // 查询数据字典列表
-        getDictList(parentKey, code = "808907"){
+        getDictList(parentKey, code = "807706"){
             return Ajax.get(code, {parentKey});
         },
         // 查询系统参数

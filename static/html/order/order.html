@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <link rel="import" href="../head.html?__inline">
+    <title>订单详情</title>
+    <!--SCRIPT_PLACEHOLDER-->
+</head>
+
+<body>
+    <div class="confirm-order-wrapper">
+        <div class="confirm-list">
+            <div class="confirm-item border-bottom-1px">
+                <div class="am-flexbox">
+                    <span class="title">上课时间</span>
+                    <div class="text">2017-07-09 周一 15:00-16:00</div>
+                </div>
+            </div>
+            <div class="confirm-item border-bottom-1px">
+                <div class="am-flexbox">
+                    <span class="title">上课地点</span>
+                    <div class="addr-icon text">梦想孝正天使村梦想孝正天使村梦想孝正天使村</div>
+                </div>
+            </div>
+            <div class="confirm-item border-bottom-1px">
+                <div class="am-flexbox">
+                    <span class="title">上课人数</span>
+                    <div class="text">10</div>
+                </div>
+            </div>
+            <div class="confirm-item border-bottom-1px">
+                <div class="am-flexbox">
+                    <span class="title">支付金额</span>
+                    <div class="text amount">200元</div>
+                </div>
+            </div>
+            <div class="confirm-item border-bottom-1px">
+                <div class="am-flexbox">
+                    <span class="title">联系方式</span>
+                    <div class="text">18888882222</div>
+                </div>
+            </div>
+            <div class="confirm-item border-bottom-1px">
+                <div class="am-flexbox am-flexbox-align-top">
+                    <span class="title">特别嘱咐</span>
+                    <div class="text remark">特别嘱咐特别嘱咐特别嘱咐特别嘱咐特别嘱咐</div>
+                </div>
+            </div>
+        </div>
+        <div class="confirm-btn">
+            <button type="button" class="am-button am-button-primary">确认接单</button>
+            <button type="button" class="am-button am-button-ghost am-button-cancel">取消</button>
+        </div>
+    </div>
+    <link rel="import" href="../footer.html?__inline">
+    <script>
+        require(['app/controller/order/Order']);
+    </script>
+</body>
+
+</html>

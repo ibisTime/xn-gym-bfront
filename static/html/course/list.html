@@ -8,23 +8,15 @@
 </head>
 
 <body>
-    <ul class="course-list">
-        <li class="course-item">
-            <span class="week">周四</span><span>09:10-11:00</span>
-            <div class="edit">
-                <i class="edit-icon"></i><span>修改</span>
-            </div>
-        </li>
-        <li class="course-item">
-            <span class="week">周四</span><span>09:10-11:00</span>
-            <div class="edit">
-                <i class="edit-icon"></i><span>修改</span>
-            </div>
-        </li>
-    </ul>
+    <ul class="course-list" id="content"></ul>
+    <div id="loadingWrap" class="loading-item hidden"><i class="global-loading-icon1"></i><span>加载中...</span></div>
+    <div id="loadAll" class="load-all hidden">
+        <img src="../../images/end.png">
+        <span>已经全部加载完毕</span>
+    </div>
     <div class="am-whitespace-xxl"></div>
     <div class="course-list-btn">
-        <a href="./add-edit.html" class="am-button am-button-primary">新增</a>
+        <button id="addBtn" class="am-button am-button-primary">新增</button>
     </div>
     <link rel="import" href="../footer.html?__inline">
     <script>

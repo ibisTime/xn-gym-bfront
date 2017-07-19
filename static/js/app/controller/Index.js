@@ -1,49 +1,121 @@
 define([
     'app/controller/base',
-    'app/interface/GeneralCtr'
-], function(base, GeneralCtr) {
-    // init();
-    function init(){
+    'app/interface/GeneralCtr',
+    'app/interface/UserCtr',
+    'app/interface/AccountCtr'
+], function(base, GeneralCtr, UserCtr, AccountCtr) {
+    const PASSING = 0, PASS = 1, UNPASS = 2, UNAPPLY = -1;
+    // 审核状态
+    var passStatus = UNAPPLY;
+    init();
+    function init() {
         base.showLoading();
     	$.when(
-    		getNotice(),
-            getPageCoach()
+            getCoachByUserId(),
+            getAccount(),
+    		getNotice()
     	).then(base.hideLoading);
     	addListener();
-        // weixin.initShare({
-        //     title: document.title,
-        //     desc: document.title,
-        //     link: location.href,
-        //     imgUrl: base.getShareImg()
-        // });
+    }
+    // 获取用户账户
+    function getAccount() {
+        return AccountCtr.getAccount()
+            .then((data) => {
+                data.forEach((account) => {
+                    if(account.currency === "CNY"){
+                        $("#amount").text(base.formatMoney(account.amount));
+                    }
+                })
+            });
+    }
+    // 根据userId查询教练
+    function getCoachByUserId() {
+        return UserCtr.getCoachByUserId(base.getUserId())
+            .then((data) => {
+                $("#avatar").attr("src", base.getImg(data.pic));
+                passStatus = data.status;
+                // 0待审批，1 审批通过，2 审批不通过
+                if(data.status == PASSING) {
+                    alert("您的资料还在审批中，请耐心等待");
+                } else if(data.status == UNPASS) {
+                    alert("非常抱歉，你的资料未通过审核。请修改资料后，重新提交申请");
+                    location.href = "./user/apply.html?code=1";
+                }
+            }, (error, d) => {
+                d && d.close();
+                base.confirm("您需要先完善个人资料并在通过审核后，<br/>才可以使用本系统")
+                    .then(() => {
+                        location.href = "./user/apply.html";
+                    }, () => {});
+            });
     }
 
-    function addListener(){
-
-    }
-    // 分页查询私教
-    function getPageCoach(refresh) {
-        return CoachCtr.getPageCoach({
-            start: 1,
-            limit: 10
-        }).then((data) => {
-            console.log(data);
-        })
+    function addListener() {
+        // 私课管理
+        $("#skgl").click(function() {
+            if(passStatus == PASS){
+                location.href="./course/list.html";
+            } else {
+                showConfirm();
+            }
+        });
+        // 形象展示
+        $("#xxzs").click(function() {
+            if(passStatus == PASS){
+                location.href="./user/edit.html";
+            } else {
+                showConfirm();
+            }
+        });
+        // 接单管理
+        $("#jdgl").click(function() {
+            if(passStatus == PASS){
+                location.href="./order/orders.html";
+            } else {
+                showConfirm();
+            }
+        });
+        // 结算管理
+        $("#jsgl").click(function() {
+            if(passStatus == PASS){
+                location.href="./account/account.html";
+            } else {
+                showConfirm();
+            }
+        });
     }
     //公告
-    function getNotice(){
-    	return GeneralCtr.getPageSysNotice(1, 1)
-            .then(function(data){
+    function getNotice() {
+    	return GeneralCtr.getPageSysNotice({start: 1, limit: 1})
+            .then(function(data) {
     			if(data.list.length){
     				$("#noticeWrap").html(`
                         <a href="../notice/notice.html" class="am-flexbox am-flexbox-justify-between">
                             <div class="am-flexbox am-flexbox-item">
-                                <img src="/static/images/notice.png" alt="">
+                                <i class="notice-icon"></i>
                                 <span class="am-flexbox-item t-3dot">${data.list[0].smsTitle}</span>
                             </div>
                             <i class="right-arrow"></i>
                         </a>`).removeClass("hidden");
     			}
         	});
+    }
+
+    // 根据状态显示提示信息
+    function showConfirm() {
+        // 未申请
+        if(passStatus == UNAPPLY) {
+            base.confirm("您需要先完善个人资料并在通过审核后，<br/>才可以使用本系统")
+                .then(() => {
+                    location.href = "./user/apply.html";
+                }, () => {});
+        // 审核中
+        }else if(passStatus == PASSING) {
+            alert("您的资料还在审批中，请耐心等待");
+        // 未通过审核
+        }else if(passStatus == UNPASS) {
+            alert("非常抱歉，你的资料未通过审核。请修改资料后，重新提交申请");
+            location.href = "./user/apply.html?code=1";
+        }
     }
 });

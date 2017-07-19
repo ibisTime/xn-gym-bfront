@@ -65,16 +65,19 @@ define([
                 if (res.errorCode == "4") {
                     clearSessionUser();
                     sessionStorage.setItem("l-return", location.pathname + location.search);
-                    location.replace("../user/redirect.htm");
-                    return $.Deferred().reject();
+                    setTimeout(function() {
+                        location.replace("../user/redirect.htm");
+                    }, 500);
+                    var d = showMsg("登录超时");
+                    return $.Deferred().reject("登录超时", d);
                 }
                 if(res.errorCode != "0"){
-                    loading.hideLoading();
-                    return $.Deferred().reject(res.errorInfo);
+                    var d = showMsg(res.errorInfo);
+                    return $.Deferred().reject(res.errorInfo, d);
                 }
                 return res.data;
             }).fail(function(error){
-                showMsg(error);
+                loading.hideLoading();
             });
         }
     };

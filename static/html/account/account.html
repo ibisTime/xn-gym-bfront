@@ -11,28 +11,28 @@
     <div class="amount-wrapper">
         <a href="./flow.html" class="remain-amount">
             <p class="tip">可用余额(元)</p>
-            <div class="amount">100.00</div>
+            <div class="amount" id="amount">0.00</div>
             <i class="right-arrow"></i>
         </a>
         <div class="amount-infos">
             <div class="am-flexbox am-flexbox-justify-between">
                 <div class="amount-item">
                     <p>总收入(元)</p>
-                    <div class="amount">1000.00</div>
+                    <div class="amount" id="inAmount">0.00</div>
                 </div>
                 <div class="amount-item">
                     <p>已取钱金额(元)</p>
-                    <div class="amount">1000.00</div>
+                    <div class="amount" id="outAmount">0.00</div>
                 </div>
             </div>
         </div>
     </div>
     <div class="amount-btn">
-        <a href="./withdraw.html" class="am-button am-button-primary">提现</a>
+        <button class="am-button am-button-primary" id="goBtn">提现</button>
     </div>
     <link rel="import" href="../footer.html?__inline">
     <script>
-        require(['app/controller/account']);
+        require(['app/controller/account/Account']);
     </script>
 </body>
 

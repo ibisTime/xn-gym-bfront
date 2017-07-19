@@ -39,10 +39,6 @@
             height: 4.7rem;
         }
 
-        label.error {
-            top: 0.3rem;
-        }
-
         .picker-calendar-month-picker,
         .picker-calendar-year-picker {
             line-height: 0.8rem;
@@ -82,37 +78,44 @@
 </head>
 
 <body>
-    <div class="course-wrapper">
+    <form id="formWrapper" class="course-wrapper">
         <div class="course-item am-flexbox am-flexbox-justify-between">
-            <div class="am-flexbox am-flexbox-item">
-                <span>上课时间</span>
-                <select class="over-select am-flexbox-item" name="" id="">
-                    <option value="1">周一</option>
-                    <option value="2">周二</option>
-                    <option value="3">周三</option>
-                    <option value="4">周四</option>
-                    <option value="5">周五</option>
-                    <option value="6">周六</option>
-                    <option value="7">周日</option>
+            <div class="am-flexbox am-flexbox-item am-flexbox-justify-between">
+                <span>周几上课</span>
+                <select class="over-select am-flexbox-item" name="skCycle" id="skCycle">
+                    <option value="2">周一</option>
+                    <option value="3">周二</option>
+                    <option value="4">周三</option>
+                    <option value="5">周四</option>
+                    <option value="6">周五</option>
+                    <option value="7">周六</option>
+                    <option value="1">周日</option>
                 </select>
-                <span class="fr">周一</span>
+                <span class="fr" id="week">周一</span>
             </div>
             <i class="right-arrow"></i>
         </div>
         <div class="course-item am-flexbox am-flexbox-justify-between">
             <div class="am-flexbox am-flexbox-item">
                 <span>上课时间</span>
-                <input id="timeStart" class="time-select am-flexbox-item"/>
+                <input id="skStartDatetime" name="skStartDatetime" class="time-select am-flexbox-item"/>
+            </div>
+            <i class="right-arrow"></i>
+        </div>
+        <div class="course-item am-flexbox am-flexbox-justify-between">
+            <div class="am-flexbox am-flexbox-item">
+                <span>下课时间</span>
+                <input id="skEndDatetime" name="skEndDatetime" class="time-select am-flexbox-item"/>
             </div>
             <i class="right-arrow"></i>
         </div>
         <div class="course-item am-flexbox">
             <span>价格(元)</span>
-            <input class="amount-input am-flexbox-item" type="number" placeholder="请输入价格"/>
+            <input class="amount-input am-flexbox-item" type="number" id="price" name="price" placeholder="请输入价格"/>
         </div>
-    </div>
+    </form>
     <div class="course-btn">
-        <a href="./add-edit.html" class="am-button am-button-primary">新增</a>
+        <button class="am-button am-button-primary" id="saveBtn">保存</button>
     </div>
     <link rel="import" href="../footer.html?__inline">
     <script src="../../js/lib/j_picker/jquery-weui.min.js"></script>

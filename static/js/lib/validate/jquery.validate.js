@@ -178,7 +178,7 @@
 
             data = $.validator.normalizeRules(
                 $.extend(
-                    {required: true, isNotFace: true},
+                    {required: false, isNotFace: false},
                     $.validator.classRules( element ),
                     $.validator.attributeRules( element ),
                     $.validator.dataRules( element ),

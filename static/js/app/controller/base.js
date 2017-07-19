@@ -137,20 +137,6 @@ define([
             CookieUtil.del("userId"); //userId
             CookieUtil.del("token"); //token
         },
-        goBackUrl: function(url, isLoginBack) {
-            var rUrl = Base.getUrlParam("return");
-            if (isLoginBack) {
-                var returnUrl = sessionStorage.getItem("l-return");
-                location.href = returnUrl || url || "../user/user_info.htm";
-            } else {
-                if (rUrl) {
-                    location.href = rUrl;
-                } else {
-                    location.href = url || "../index.htm";
-                }
-            }
-
-        },
         isLogin: function() {
             return !!Base.getUserId();
         },
@@ -158,8 +144,7 @@ define([
             return location.origin;
         },
         goLogin: function() {
-            sessionStorage.setItem("l-return", location.pathname + location.search);
-            location.href = "../user/redirect.htm";
+            location.href = "../user/login.html";
         },
         throttle: function(method, context, t) {
             var tt = t || 100;
@@ -170,40 +155,20 @@ define([
         },
         // 获取图片
         getImg: function(pic, no_suffix) {
-            if (!pic) {
-                pic = "/static/images/person.png?_inline";
-                return pic;
-            }
             if (pic) {
                 pic = pic.split(/\|\|/)[0];
             }
             if (!/^http/i.test(pic)) {
                 var suffix = no_suffix
                     ? ""
-                    : '?imageMogr2/auto-orient/thumbnail/!100x100r';
+                    : '?imageMogr2/auto-orient';
                 pic = PIC_PREFIX + pic + suffix;
             }
             return pic
         },
-        // 获取分享的图片
-        getShareImg: function(pic) {
-            if (!pic) {
-                return location.origin + '/static/images/logo.png';
-            }
-            pic = pic.split("||")[0];
-            if (!/^http/i.test(pic)) {
-                pic = PIC_PREFIX + pic;
-            }
-            return pic;
-        },
         formatMoney: function(s, t) {
             if (!$.isNumeric(s))
                 return "--";
-            var num = +s / 1000;
-            num = Math.ceil(num * Math.pow(10, t || 2)) / 100;
-            return num.toFixed(t || 2);
-        },
-        formatMoneyD: function(s, t) {
             s = (s / 1000).toString();
             s = s.replace(/(\.\d\d)\d+/ig, "$1");
             return parseFloat(s).toFixed(t || 2);
@@ -218,10 +183,6 @@ define([
                 card = "**** **** **** **** " + card.substr(16);
             }
             return card;
-        },
-        // 返回上一页
-        getBack: function() {
-            location.href = document.referrer;
         },
         getDictListValue: function(dkey, arrayData) { //类型
             for (var i = 0; i < arrayData.length; i++) {
@@ -259,7 +220,7 @@ define([
             }
         },
         // 确认框
-        confirm: function(msg, cancelValue, okValue) {
+        confirm: function(msg, cancelValue = "取消", okValue = "确认") {
             return (new Promise(function(resolve, reject) {
                 var d = dialog({
                     content: msg,
@@ -289,6 +250,20 @@ define([
         // 隐藏loading
         hideLoading: function() {
             loading.hideLoading();
+        },
+        // 根据文本和图片生成html
+        getDescription: function(description, descPics) {
+            var pic_html = "";
+            descPics.forEach(function(pic) {
+                pic_html += `<img src="${PIC_PREFIX + pic}"/>`;
+            });
+            description = description.replace(/\n/g, "<br/>").replace(/\s/g, "&nbsp;");
+            description += pic_html;
+            return description;
+        },
+        // 把html解析成文本和图片
+        decodeDescription: function(description) {
+            // var decodeDescription
         }
     };
 

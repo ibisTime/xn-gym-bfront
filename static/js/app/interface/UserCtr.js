@@ -3,18 +3,52 @@ define([
     'app/util/ajax'
 ], function(base, Ajax) {
     return {
-        // 微信登录
-        /*
-         * 微信登录
-         * config: {code,mobile?,smsCaptcha?,userReferee}
+        /**
+         * 注册
+         * @param config {mobile, loginPwd, smsCaptcha}
          */
-        wxLogin(config) {
-            return Ajax.post("805151", config);
+        register(config) {
+            return Ajax.post("805041", {
+                kind: "f2",
+                loginPwdStrength: base.calculateSecurityLevel(config.loginPwd),
+                ...config
+            });
+        },
+        /**
+         * 登录
+         * @param config {loginName, loginPwd}
+         */
+        login(config) {
+            return Ajax.post("805043", {
+                kind: "f2",
+                ...config
+            });
+        },
+        /**
+         * 提交资料，申请成为教练员
+         * @param config {realName, pic, gender, age, duration, label, advPic, description}
+         */
+        apply(config) {
+            return Ajax.post("622090", {
+                userId: base.getUserId(),
+                ...config
+            });
+        },
+        // 根据userId详情查询私教
+        getCoachByUserId(userId, refresh) {
+            return Ajax.get("622098", {userId}, refresh);
+        },
+        /**
+         * 修改私教信息
+         * @param config {code, realName, pic, gender, age, duration, label, advPic, description}
+         */
+        editCoach(config) {
+            return Ajax.post("622091", config);
         },
         // 获取用户详情
         getUser(refresh) {
             return Ajax.get("805056", {
-                "userId": base.getUserId()
+                userId: base.getUserId()
             }, refresh);
         },
         // 绑定手机号
@@ -41,46 +75,6 @@ define([
                 smsCaptcha,
                 userId: base.getUserId()
             });
-        },
-        // 详情查询地址
-        getAddress(code, refresh) {
-            return Ajax.get("805166", {code}, refresh);
-        },
-        // 查询地址列表
-        getAddressList() {
-            return Ajax.post("805165", {
-                userId: base.getUserId(),
-                isDefault: ""
-            });
-        },
-        // 新增或修改地址
-        addOrEditAddr(config) {
-            return config.code ? this.editAddress(config) : this.addAddress(config);
-        },
-        // 修改地址
-        editAddress(config) {
-            return Ajax.post("805162", {
-                userId: base.getUserId(),
-                ...config
-            });
-        },
-        // 新增地址
-        addAddress(config) {
-            return Ajax.post("805160", {
-                userId: base.getUserId(),
-                ...config
-            });
-        },
-        // 设置为默认地址
-        setDefaultAddr(code) {
-            return Ajax.post("805163", {
-                code,
-                userId: base.getUserId()
-            });
-        },
-        // 删除地址
-        deleteAddress(code) {
-            return Ajax.post("805161", {code});
         },
         // 详情查询银行卡
         getBankCard(code) {
