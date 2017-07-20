@@ -20,6 +20,7 @@ define([
     	GeneralCtr.getPageSysNotice(config, refresh)
             .then(function(data) {
                 base.hideLoading();
+                hideLoading();
                 var lists = data.list;
                 var totalCount = +data.totalCount;
                 if (totalCount <= config.limit || lists.length < config.limit) {
@@ -34,16 +35,23 @@ define([
                     $("#loadAll").removeClass("hidden");
                 }
                 canScrolling = true;
-        	}, () => {});
+        	}, hideLoading);
     }
     function addListener() {
         //下拉加载
         $(window).off("scroll").on("scroll", function() {
             if (canScrolling && !isEnd && ($(document).height() - $(window).height() - 10 <= $(document).scrollTop())) {
                 canScrolling = false;
-                addLoading();
+                showLoading();
                 getPageNotice();
             }
         });
+    }
+    function showLoading() {
+        $("#loadingWrap").removeClass("hidden");
+    }
+
+    function hideLoading() {
+        $("#loadingWrap").addClass("hidden");
     }
 });

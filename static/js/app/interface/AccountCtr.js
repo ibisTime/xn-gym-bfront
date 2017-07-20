@@ -9,47 +9,53 @@ define([
                 userId: base.getUserId()
             }, refresh);
         },
-        // 账户的橙券购买
-        payCQ(amount, payType, toUserId = SYSTEM_USERID) {
-            return Ajax.post("802420", {
-    			toUserId,
-                amount,
-                payType,
-                fromUserId : base.getUserId(),
-                currency: "CB"
-            })
-        },
-        // 账户余额微信充值
-        recharge(amount, openId) {
-            return Ajax.post("802710", {
-                amount,
-                openId,
-                applyUser: base.getUserId(),
-                channelType: 35
-            });
-        },
-        /*
+        /**
          * 分页查询流水
-         * config: {start, limit, accountNumber}
+         * @param config: {start, limit, accountNumber}
          */
         getPageFlow(config) {
             return Ajax.get("802524", config);
         },
-        // 卡券充值
-        rechargeByCard(couponCode) {
-            return Ajax.post("805321", {
-                couponCode,
-                userId: base.getUserId()
-            });
-        },
-        /*
+        /**
          * 取现
-         * config: {accountNumber,payCardNo,remainAmount,amount,applyUser,applyNote,tradePwd,payCardInfo}
+         * @param config: {accountNumber,payCardNo,remainAmount,amount,applyUser,applyNote,tradePwd,payCardInfo}
          */
         withDraw(config) {
             return Ajax.post("802750", {
                 applyUser: base.getUserId(),
                 ...config
+            });
+        },
+        // 获取银行数据字典列表
+        getBankCodeList(refresh) {
+            return Ajax.get("802116", refresh);
+        },
+        // 根据code获取银行卡详情
+        getBankCard(code, refresh) {
+            return Ajax.get("802017", {code}, refresh);
+        },
+        /**
+         * 添加银行卡
+         * @param config {}
+         */
+        addBankCard(config) {
+            return Ajax.post("802010", config);
+        },
+        /**
+         * 修改银行卡
+         * @param config {}
+         */
+        editBankCard(config) {
+            return Ajax.post("802012", {
+                status: 1,
+                ...config
+            });
+        },
+        // 获取银行卡列表
+        getBankCardList(){
+            return Ajax.get("802016", {
+                userId: base.getUserId(),
+                status: "1"
             });
         }
     };

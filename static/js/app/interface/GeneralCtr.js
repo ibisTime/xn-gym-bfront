@@ -27,13 +27,6 @@ define([
                 "kind": "f2"
             });
         },
-        // 获取转化汇率
-        getTransRate(fromCurrency, toCurrency) {
-            return Ajax.get("002051", {
-                fromCurrency,
-                toCurrency
-            });
-        },
         /**
          * 分页查询系统公告
          * @param config {start, limit}
@@ -55,12 +48,6 @@ define([
         // 查询系统参数
         getSysConfig(ckey, code = "807717"){
             return Ajax.get(code, {ckey});
-        },
-        // 查询banner列表
-        getBanner(refresh){
-            return Ajax.get("806051", {
-                type: "2"
-            }, refresh);
         }
     };
 })
