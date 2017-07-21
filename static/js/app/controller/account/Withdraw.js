@@ -20,8 +20,8 @@ define([
         });
     }
     function getRate() {
-        return GeneralCtr.getSysConfig("BUSERQXFL").then((data) => {
-            rate = +data.note;
+        return GeneralCtr.getAccountSysConfig("BUSERQXFL").then((data) => {
+            rate = +data.cvalue;
         });
     }
     // 获取银行卡列表
@@ -76,7 +76,8 @@ define([
                 amount: {
                     required: true,
                     withdraw: true,
-                    ltR: true
+                    ltR: true,
+                    maxAmount: true
                 },
                 payCardNo: {
                     required: true
@@ -115,6 +116,12 @@ define([
             }
             return !!value;
         }, '必须为5的倍数');
+        $.validator.addMethod("maxAmount", function(value, element) {
+            if($.isNumeric(value)) {
+                return +value <= 50000;
+            }
+            return false;
+        }, '单笔最高50000元');
         $.validator.addMethod("ltR", function(value, element) {
             value = +value;
             if(value * 1000 > remainAmount) {

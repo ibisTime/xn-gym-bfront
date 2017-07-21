@@ -45,9 +45,17 @@ define([
         getDictList(parentKey, code = "807706"){
             return Ajax.get(code, {parentKey});
         },
-        // 查询系统参数
-        getSysConfig(ckey, code = "807717"){
-            return Ajax.get(code, {ckey});
-        }
+        // 查询user系统参数
+        getUserSysConfig(ckey){
+            return Ajax.get("807717", {ckey});
+        },
+        // 查询account系统参数
+        getAccountSysConfig(key){
+            return Ajax.get("802027", {key});
+        },
+        // 查询业务系统参数
+        getBizSysConfig(ckey){
+            return Ajax.get("622917", {ckey});
+        },
     };
 })
