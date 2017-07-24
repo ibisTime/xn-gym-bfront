@@ -5,7 +5,7 @@ define([
     return {
         /**
          * 注册
-         * @param config {mobile, loginPwd, smsCaptcha}
+         * @param config {mobile, loginPwd, smsCaptcha, userReferee?}
          */
         register(config) {
             return Ajax.post("805041", {
@@ -20,6 +20,17 @@ define([
          */
         login(config) {
             return Ajax.post("805043", {
+                kind: "f2",
+                ...config
+            });
+        },
+        /**
+         * 找回密码
+         * @param config: {mobile, smsCaptcha, newLoginPwd}
+         */
+        findPwd: (config) => {
+            return Ajax.post("805048", {
+                loginPwdStrength: base.calculateSecurityLevel(config.newLoginPwd),
                 kind: "f2",
                 ...config
             });

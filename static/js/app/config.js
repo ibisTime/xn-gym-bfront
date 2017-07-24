@@ -1,6 +1,4 @@
-var SYSTEM_USERID = 'SYS_USER_YAOCHENG';
 var SYSTEM_CODE = "CD-ZWZJ000012";
-var COMPANYCODE = "CD-ZWZJ000012";
 var PIC_PREFIX = 'http://oq4vi26fi.bkt.clouddn.com/';
 
 (function() {

@@ -606,6 +606,26 @@ label.error {
                     color: $primary-color;
                 }
             }
+            .order-item-footer {
+                border-top: 1px solid #eee;
+                height: 0.88rem;
+                padding: 0 0.3rem;
+
+                .am-button {
+                    background-color: transparent;
+                    color: #ff0200;
+                    border: 0.02rem solid #ff0200;
+                    font-size: 0.28rem;
+                    height: 0.64rem;
+                    line-height: 0.6rem;
+                    float: right;
+                    margin-top: 0.12rem;
+
+                    &+.am-button {
+                        margin-right: 0.2rem;
+                    }
+                }
+            }
         }
     }
 }
@@ -998,5 +1018,10 @@ button[disabled] {
         position: absolute;
         left: 50%;
         transform: translateX(-50%);
+
+        img {
+            width: 100%;
+            height: 100%;
+        }
     }
 }

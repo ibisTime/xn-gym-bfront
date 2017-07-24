@@ -26,7 +26,7 @@ define([
                     required: true,
                     "sms": true
                 },
-                loginPwd: {
+                newLoginPwd: {
                     required: true,
                     maxlength: 16,
                     minlength: 6,
@@ -34,31 +34,30 @@ define([
                 },
                 rePwd: {
                     required: true,
-                    equalTo: "#loginPwd"
+                    equalTo: "#newLoginPwd"
                 }
             },
             onkeyup: false
         });
         timer = smsCaptcha.init({
-            bizType: '805041'
+            bizType: '805048'
         });
-        $("#registerBtn").on("click", function() {
+        $("#findBtn").on("click", function() {
             if(_formWrapper.valid()){
-                register(_formWrapper.serializeObject());
+                findPwd(_formWrapper.serializeObject());
             }
         });
     }
 
-    function register(param) {
-        base.showLoading("注册中...");
-        if(userReferee) {
-            param.userReferee = userReferee;
-        }
-        UserCtr.register(param)
+    function findPwd(param) {
+        base.showLoading("修改中...");
+        UserCtr.findPwd(param)
             .then((data) => {
                 base.hideLoading();
-                base.setSessionUser(data);
-                location.href = "../index.html";
+                base.showMsg("密码修改成功");
+                setTimeout(() => {
+                    location.replace('./login.html');
+                }, 500);
             }, () => {
                 $("#getVerification").text("获取验证码").prop("disabled", false);
                 clearInterval(timer);

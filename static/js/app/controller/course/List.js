@@ -1,8 +1,9 @@
 define([
     'app/controller/base',
+    'app/interface/UserCtr',
     'app/interface/CourseCtr',
     'app/util/handlebarsHelpers'
-], function(base, CourseCtr, Handlebars) {
+], function(base, UserCtr, CourseCtr, Handlebars) {
     var _tmpl = __inline('../../ui/course-list-item.handlebars');
     var config = {
         start: 1,
@@ -11,12 +12,16 @@ define([
 
     init();
     function init() {
-		getPageCourse();
+        base.showLoading();
+        UserCtr.getCoachByUserId(base.getUserId())
+            .then((data) => {
+                config.coachCode = data.code;
+                getPageCourse();
+            });
         addListener();
     }
-    //公告
+    // 私课
     function getPageCourse(refresh) {
-        base.showLoading();
     	CourseCtr.getPageCourse(config, refresh)
             .then(function(data) {
                 base.hideLoading();
