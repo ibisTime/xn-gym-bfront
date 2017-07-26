@@ -1,18 +1,21 @@
 define([
     'app/controller/base',
+    'app/util/dict',
     'app/interface/CourseCtr'
-], function(base, CourseCtr) {
+], function(base, Dict, CourseCtr) {
     var config = {
         start: 1,
         limit: 10
     }, isEnd = false, canScrolling = false;
+    var orderStatus = Dict.get("coachOrderStatus");
     var currentType = 0,
         // status: 0 待付款，1 付款成功，2 已接单，3 已上课，4 已下课，5 用户取消，6 平台取消，7 已完成
         type2Status = {
-            "0": "1",
-            "1": "2",
-            "2": "3",
-            "3": "7"
+            "0": "",
+            "1": "1",
+            "2": "2",
+            "3": "3",
+            "4": "7"
         }, genderList = {
             "0": "女",
             "1": "男"
@@ -41,13 +44,13 @@ define([
                     isEnd = false;
                 }
                 if(data.list.length) {
-                    config.start++;
                     var html = "";
                     lists.forEach((item) => {
                         html += buildHtml(item);
                     });
-                    $("#content" + currentType).html(html);
+                    $("#content" + currentType)[refresh || config.start == 1 ? "html" : "append"](html);
                     isEnd && $("#loadAll" + currentType).removeClass("hidden");
+                    config.start++;
                 } else if(config.start == 1) {
                     $("#content" + currentType).html('<div class="no-data">暂无订单</div>');
                     $("#loadAll" + currentType).addClass("hidden");
@@ -84,7 +87,7 @@ define([
                                     </div>
                                 </div>
                             </div>
-                            <div class="order-status">¥${base.formatMoney(item.amount)}</div>
+                            <div class="order-status">${orderStatus[item.status]}</div>
                         </div>
                     </a>
                     ${
@@ -92,9 +95,11 @@ define([
                             ? `<div class="order-item-footer">
                                     ${
                                         item.status == "1"
-                                            ? `<button class="am-button am-button-small taking-order" data-code="${item.code}">接单</button>`
+                                            ? `<button class="am-button am-button-small taking-order" data-code="${item.code}">接单</button>
+                                                <button class="am-button am-button-small cancel-order" data-code="${item.code}">取消订单</button>`
                                             : item.status == "2"
-                                                ? `<button class="am-button am-button-small start-order" data-code="${item.code}">上课</button>`
+                                                ? `<button class="am-button am-button-small start-order" data-code="${item.code}">上课</button>
+                                                    <button class="am-button am-button-small cancel-order" data-code="${item.code}">取消订单</button>`
                                                 : `<button class="am-button am-button-small end-order" data-code="${item.code}">下课</button>`
                                     }
                                 </div>`
@@ -110,13 +115,13 @@ define([
             _tabpanes = $("#am-tabs-content").find(".am-tabs-tabpane");
         $("#am-tabs-bar").on("click", ".am-tabs-tab", function(){
             var _this = $(this), index = _this.index() - 1;
-            if(!_this.hasClass(".am-tabs-tab-active")){
+            if(!_this.hasClass("am-tabs-tab-active")){
                 _this.addClass("am-tabs-tab-active")
                     .siblings(".am-tabs-tab-active").removeClass("am-tabs-tab-active");
                 _tabsInkBar.css({
-                    "-webkit-transform": "translate3d(" + index * 1.875 + "rem, 0px, 0px)",
-                    "-moz-transform": "translate3d(" + index * 1.875 + "rem, 0px, 0px)",
-                    "transform": "translate3d(" + index * 1.875 + "rem, 0px, 0px)"
+                    "-webkit-transform": "translate3d(" + index * 1.5 + "rem, 0px, 0px)",
+                    "-moz-transform": "translate3d(" + index * 1.5 + "rem, 0px, 0px)",
+                    "transform": "translate3d(" + index * 1.5 + "rem, 0px, 0px)"
                 });
                 _tabpanes.eq(index).removeClass("am-tabs-tabpane-inactive")
                     .siblings().addClass("am-tabs-tabpane-inactive");
@@ -127,6 +132,7 @@ define([
                 getPageOrders();
             }
         });
+        // 接单
         $("#orderWrapper").on("click", ".taking-order", function() {
             var orderCode = $(this).attr("data-code");
             base.confirm("确定接单吗？", "取消", "确认")
@@ -134,13 +140,29 @@ define([
                     base.showLoading("接单中...");
                     CourseCtr.takingOrder(orderCode)
                         .then(() => {
-                            base.showMsg("接单成功");
+                            base.showMsg("操作成功");
                             base.showLoading();
                             config.start = 1;
                             getPageOrders(true);
                         });
                 }, () => {});
         });
+        // 取消订单
+        $("#orderWrapper").on("click", ".cancel-order", function() {
+            var orderCode = $(this).attr("data-code");
+            base.confirm("确定取消订单吗？", "取消", "确认")
+                .then(() => {
+                    base.showLoading("取消中...");
+                    CourseCtr.cancelOrder(orderCode)
+                        .then(() => {
+                            base.showMsg("操作成功");
+                            base.showLoading();
+                            config.start = 1;
+                            getPageOrders(true);
+                        });
+                }, () => {});
+        });
+        // 上课
         $("#orderWrapper").on("click", ".start-order", function() {
             var orderCode = $(this).attr("data-code");
             base.confirm("确定上课吗？", "取消", "确认")
@@ -155,6 +177,7 @@ define([
                         });
                 }, () => {});
         });
+        // 下课
         $("#orderWrapper").on("click", ".end-order", function() {
             var orderCode = $(this).attr("data-code");
             base.confirm("确定下课吗？", "取消", "确认")
@@ -170,7 +193,7 @@ define([
                 }, () => {});
         });
 
-        $(window).off("scroll").on("scroll", function() {
+        $(window).on("scroll", function() {
             if (canScrolling && !isEnd && ($(document).height() - $(window).height() - 10 <= $(document).scrollTop())) {
                 canScrolling = false;
                 var choseIndex = $(".am-tabs-tab-active").index() - 1;

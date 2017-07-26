@@ -4,7 +4,7 @@ define([
 ], function(base, AccountCtr) {
     var config = {
         start: 1,
-        limit: 10
+        limit: 20
     }, isEnd = false, canScrolling = false;
     init();
     function init() {
@@ -52,7 +52,7 @@ define([
                 positive = transAmount > 0;
             transAmount = base.formatMoney(transAmount);
             var createDatetime = item.createDatetime,
-                day = base.formatDate(createDatetime, "MM日"),
+                day = base.formatDate(createDatetime, "dd日"),
                 time = base.formatDate(createDatetime, "hh:mm");
 
             html += `<div class="flow-item border-bottom-1px">
@@ -65,7 +65,11 @@ define([
                         <i class="${positive ? 'receive-icon' : 'pay-icon'}"></i>
                     </div>
                     <div class="flow-content am-flexbox-item">
-                        <p class="f-transAmount f-trans-red">${positive ? `+${transAmount}` : transAmount}</p>
+                        ${
+                            positive
+                                ? `<p class="f-transAmount f-trans-red">+${transAmount}</p>`
+                                : `<p class="f-transAmount f-trans-blue">${transAmount}</p>`
+                        }
                         <p class="flow-remark">${item.bizNote}</p>
                     </div>
                 </div>
@@ -75,7 +79,7 @@ define([
     }
     function addListener() {
         //下拉加载
-        $(window).off("scroll").on("scroll", function() {
+        $(window).on("scroll", function() {
             if (canScrolling && !isEnd && ($(document).height() - $(window).height() - 10 <= $(document).scrollTop())) {
                 canScrolling = false;
                 showLoading();

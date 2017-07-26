@@ -21,6 +21,7 @@ define([
         } else {
             getCoachByUserId().then(() => {
                 base.hideLoading();
+                $("#week").text($("#skCycle").find("option:selected").text());
                 addListener();
             });
         }
@@ -37,7 +38,8 @@ define([
         return CourseCtr.getCourse(code)
             .then((data) => {
                 course = data;
-                $("#skCycle").val(data.skCycle).trigger("change");
+                $("#skCycle").val(data.skCycle);
+                $("#week").text($("#skCycle").find("option:selected").text());
                 $("#price").val(base.formatMoney(data.price));
             });
     }
@@ -126,7 +128,6 @@ define([
         $("#skCycle").on("change", function() {
             $("#week").text($(this).find("option:selected").text());
         });
-
     }
     function beforeSubmit(param) {
         var skStartDatetime = param.skStartDatetime.split(/\s:\s/);

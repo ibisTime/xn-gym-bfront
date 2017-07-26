@@ -236,8 +236,8 @@ define([
                         reject();
                         return true;
                     },
-                    cancelValue: cancelValue,
-                    okValue: okValue
+                    cancelValue: cancelValue || "取消",
+                    okValue: okValue || "确认"
                 });
                 d.showModal();
             }));

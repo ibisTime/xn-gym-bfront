@@ -3,8 +3,9 @@ define([
     'app/interface/GeneralCtr',
     'app/interface/UserCtr',
     'app/module/qiniu',
-    'app/module/validate'
-], function(base, GeneralCtr, UserCtr, qiniu, Validate) {
+    'app/module/validate',
+    'app/module/alertModal'
+], function(base, GeneralCtr, UserCtr, qiniu, Validate, alertModal) {
     var code = base.getUrlParam("code"),
         count = 2,
         coachLabel;
@@ -306,8 +307,9 @@ define([
         UserCtr.apply(param)
             .then((data) => {
                 base.hideLoading();
-                alert("申请提交成功，请耐心等待审批结果");
-                location.href = "../index.html";
+                alertModal.showCont("申请提交成功，请耐心等待审批结果", () => {
+                    location.href = "../index.html";
+                });
             });
     }
 });

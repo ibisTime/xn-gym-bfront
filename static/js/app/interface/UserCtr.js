@@ -36,6 +36,16 @@ define([
             });
         },
         /**
+         * 分页查询获客
+         * @param config: {code,mobile?,smsCaptcha?,userReferee}
+         */
+        getPageChildren(config, refresh) {
+            return Ajax.get("805054", {
+                userReferee: base.getUserId(),
+                ...config
+            }, refresh);
+        },
+        /**
          * 提交资料，申请成为教练员
          * @param config {realName, pic, gender, age, duration, label, advPic, description}
          */
@@ -76,7 +86,7 @@ define([
                 tradePwd,
                 smsCaptcha,
                 tradePwdStrength: base.calculateSecurityLevel(tradePwd),
-                userId: base.getUserId(),
+                userId: base.getUserId()
             });
         },
         // 修改手机号
@@ -119,6 +129,17 @@ define([
                 userId: base.getUserId(),
                 status: "1"
             });
+        },
+        /**
+         * 分页查询银行卡
+         * @param config: {start, limit}
+         */
+        getPageBankCard(config, refresh) {
+            return Ajax.get("802015", {
+                userId: base.getUserId(),
+                status: "1",
+                ...config
+            }, refresh);
         }
     };
 })

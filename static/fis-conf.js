@@ -19,8 +19,7 @@ fis.hook('amd', {
     }
 });
 fis.match('*', {
-    release: '/static/$0',
-    //useMap: true
+    release: '/static/$0'
 });
 fis.match('*.html', {
     release: '/$0'
@@ -33,9 +32,7 @@ fis.match('*.{css,less,scss}', {
 })
 fis.match('**/*.scss', {
     rExt: '.css',
-    parser: fis.plugin('node-sass', {
-        //fis-parser-node-sass option
-    })
+    parser: fis.plugin('node-sass', {})
 });
 fis.match('{/js/app/controller/**.js,/js/app/interface/**.js,/js/app/module/**.js}', {
     parser: fis.plugin('babel-6.x', {
@@ -52,12 +49,9 @@ fis.match('*.{js,css}', {
     useHash: false
 });
 
-//npm install -g fis-parser-handlebars-3.x
 fis.match('*.handlebars', {
     rExt: '.js', // from .handlebars to .js 虽然源文件不需要编译，但是还是要转换为 .js 后缀
-    parser: fis.plugin('handlebars-3.x', {
-        //fis-parser-handlebars-3.x option
-    }),
+    parser: fis.plugin('handlebars-3.x', {}),
     release: false // handlebars 源文件不需要编译
 });
 fis.match('::package', {
@@ -96,9 +90,6 @@ fis.media("prod")
         optimizer: null,
         packTo: '/config/config.js',
         useHash: false
-    })
-    .match("/css/*.*", {
-        packTo: '/pkg/common.css'
     })
     .match('**.png', {
         optimizer: fis.plugin('png-compressor')

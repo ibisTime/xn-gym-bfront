@@ -2,8 +2,9 @@ define([
     'app/controller/base',
     'app/interface/GeneralCtr',
     'app/interface/UserCtr',
-    'app/interface/AccountCtr'
-], function(base, GeneralCtr, UserCtr, AccountCtr) {
+    'app/interface/AccountCtr',
+    'app/module/alertModal'
+], function(base, GeneralCtr, UserCtr, AccountCtr, alertModal) {
     const PASSING = 0, PASS = 1, UNPASS = 2, UNAPPLY = -1;
     // 审核状态
     var passStatus = UNAPPLY;
@@ -36,10 +37,11 @@ define([
                 passStatus = data.status;
                 // 0待审批，1 审批通过，2 审批不通过
                 if(data.status == PASSING) {
-                    alert("您的资料还在审批中，请耐心等待");
+                    alertModal.showCont("您的资料还在审批中，请耐心等待");
                 } else if(data.status == UNPASS) {
-                    alert("非常抱歉，你的资料未通过审核。请修改资料后，重新提交申请");
-                    location.href = "./user/apply.html?code=1";
+                    alertModal.showCont("非常抱歉，你的资料未通过审核。请修改资料后，重新提交申请", () => {
+                        location.href = "./user/apply.html?code=1";
+                    });
                 }
             }, (error, d) => {
                 d && d.close();
@@ -51,10 +53,11 @@ define([
     }
 
     function addListener() {
+        alertModal.addCont();
         // 私课管理
         $("#skgl").click(function() {
             if(passStatus == PASS){
-                location.href="./course/list.html";
+                location.href = "./course/list.html";
             } else {
                 showConfirm();
             }
@@ -62,7 +65,7 @@ define([
         // 形象展示
         $("#xxzs").click(function() {
             if(passStatus == PASS){
-                location.href="./user/edit.html";
+                location.href = "./user/edit.html";
             } else {
                 showConfirm();
             }
@@ -70,7 +73,7 @@ define([
         // 接单管理
         $("#jdgl").click(function() {
             if(passStatus == PASS){
-                location.href="./order/orders.html";
+                location.href = "./order/orders.html";
             } else {
                 showConfirm();
             }
@@ -78,10 +81,23 @@ define([
         // 结算管理
         $("#jsgl").click(function() {
             if(passStatus == PASS){
-                location.href="./account/account.html";
+                location.href = "./account/account.html";
             } else {
                 showConfirm();
             }
+        });
+        // 获客
+        $("#hkbtn").click(function(e) {
+            e.stopPropagation();
+            location.href = "./invitation/invitation.html";
+        });
+        // 用户中心
+        $("#goSet").click(function() {
+            location.href = "./user/set.html";
+        });
+        // 资金流水
+        $("#goFlow").click(function() {
+            location.href = "./account/flow.html";
         });
     }
     //公告
@@ -111,11 +127,12 @@ define([
                 }, () => {});
         // 审核中
         }else if(passStatus == PASSING) {
-            alert("您的资料还在审批中，请耐心等待");
+            alertModal.showCont("您的资料还在审批中，请耐心等待");
         // 未通过审核
         }else if(passStatus == UNPASS) {
-            alert("非常抱歉，你的资料未通过审核。请修改资料后，重新提交申请");
-            location.href = "./user/apply.html?code=1";
+            alertModal.showCont("非常抱歉，你的资料未通过审核。请修改资料后，重新提交申请", () => {
+                location.href = "./user/apply.html?code=1";
+            });
         }
     }
 });

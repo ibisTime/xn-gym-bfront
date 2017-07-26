@@ -1,5 +1,5 @@
-@import "./mixin.scss";
-@import "./global.scss";
+@import "./mixin";
+@import "./global";
 
 label.error {
     position: absolute;
@@ -29,6 +29,7 @@ label.error {
 .no-data {
     line-height: 1rem;
     text-align: center;
+    font-size: 0.28rem;
 }
 
 .user-top-wrap {
@@ -597,6 +598,7 @@ label.error {
 
                     span {
                         display: inline-block;
+                        vertical-align: middle;
                         width: 100%;
                     }
                 }
@@ -948,46 +950,6 @@ label.error {
     }
 }
 
-.form-wrapper {
-    .form-item {
-        position: relative;
-        padding: 0.3rem;
-        background: #fff;
-        @include border-bottom-1px($border-color);
-
-        &:last-child {
-            @include border-none();
-        }
-
-        &.form-btn-item {
-            padding: 0.2rem 0.3rem;
-        }
-
-        .item-title {
-            width: 1.4rem;
-            font-size: 0.28rem;
-        }
-
-        .input-item {
-            position: relative;
-            flex: 1;
-            font-size: 0.3rem;
-            color: #333;
-        }
-
-        .item-button {
-            width: 2rem;
-        }
-
-        input[type="number"],
-        input[type="tel"],
-        input[type="text"] {
-            font-size: 0.3rem;
-            color: #333;
-        }
-    }
-}
-
 .c-primary {
     color: $primary-color;
 }
@@ -995,11 +957,6 @@ label.error {
 .register-btn {
     margin-top: 0.7rem;
     padding: 0 0.3rem;
-}
-
-button[disabled] {
-    background-color: #ddd;
-    border-color: #ddd;
 }
 
 .invitation-wrap {
@@ -1022,6 +979,134 @@ button[disabled] {
         img {
             width: 100%;
             height: 100%;
+        }
+    }
+}
+
+.user-list-wrap {
+    font-size: 0.3rem;
+
+    .user-list-item {
+        height: 1.12rem;
+        padding-left: 0.36rem;
+        padding-right: 0.36rem;
+        @include border-bottom-1px($border-color);
+        background: #fff;
+
+        &:last-child {
+            @include border-none();
+        }
+
+        > a {
+            overflow: visible;
+        }
+
+        img {
+            width: 0.34rem;
+            margin-right: 0.28rem;
+        }
+
+        .am-badge {
+            margin-top: -0.18rem;
+            margin-left: -0.18rem;
+        }
+    }
+}
+
+.normal-fix-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    padding: 0.2rem 0.3rem;
+    width: 100%;
+
+    .am-button {
+        height: 0.8rem;
+        line-height: 0.8rem;
+        font-size: 0.3rem;
+        padding: 0 0.5rem;
+        margin-top: 0.08rem;
+    }
+}
+
+.detail-description1 {
+    padding: 0.3rem;
+}
+
+.member-list {
+    background: #fff;
+
+    .member-item {
+        padding: 0.3rem;
+        @include border-bottom-1px($border-color);
+
+        &:last-child {
+            @include border-none();
+        }
+
+        .member-avatar {
+            margin-right: 0.2rem;
+            border-radius: 50%;
+            overflow: hidden;
+            width: 0.9rem;
+            height: 0.9rem;
+
+            img {
+                width: 100%;
+                height: 100%;
+            }
+        }
+
+        .member-info {
+            .member-phone {
+                font-size: 0.3rem;
+            }
+
+            .member-time {
+                font-size: 0.24rem;
+                color: #999;
+            }
+        }
+    }
+}
+
+.bank-wrapper {
+    padding: 0.2rem 0.3rem;
+    li {
+        padding: 0.6rem 0.4rem;
+        margin-bottom: 0.2rem;
+        line-height: 1.5;
+        border-radius: 0.2rem;
+        color: #fff;
+        background: #e63e33;
+        background: -moz-linear-gradient(left, #e63e33, #e56561);
+        background: -webkit-linear-gradient(left, #e63e33, #e56561);
+        background: -o-linear-gradient(left, #e63e33, #e56561);
+
+        .bank-icon {
+            display: inline-block;
+            width: 0.74rem;
+            height: 0.74rem;
+            background-repeat: no-repeat;
+            background-size: 0.74rem 0.74rem;
+            background-image: url(../images/bank@2x.png);
+        }
+
+        .am-flexbox-item {
+            margin-left: 0.3rem;
+
+            h2 {
+                font-size: 0.32rem;
+            }
+
+            .type {
+                font-size: 0.28rem;
+            }
+
+            .bank-code {
+                margin-top: 0.3rem;
+                font-size: 0.4rem;
+            }
         }
     }
 }

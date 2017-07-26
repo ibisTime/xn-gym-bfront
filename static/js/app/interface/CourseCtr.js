@@ -66,7 +66,7 @@ define([
          */
         getPageOrders(config, refresh) {
             return Ajax.get("622132", {
-                applyUser:  base.getUserId(),
+                toUser:  base.getUserId(),
                 ...config
             }, refresh);
         },

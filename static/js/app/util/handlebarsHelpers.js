@@ -8,9 +8,19 @@ define([
         num = (num + "").replace(/^(\d+\.\d\d)\d*/i, "$1");
         return (+ num).toFixed(2);
     });
-    Handlebars.registerHelper('formatImage', function(pic, isAvatar, options) {
+    Handlebars.registerHelper('formatImage', function(pic, options) {
         if (!pic)
             return "";
+        pic = pic.split(/\|\|/)[0];
+        if (/^http/.test(pic)) {
+            return pic;
+        }
+        return PIC_PREFIX + pic;
+    });
+    Handlebars.registerHelper('formatAvatar', function(pic, options) {
+        if (!pic) {
+            return '/static/images/avatar@2x.png';
+        }
         pic = pic.split(/\|\|/)[0];
         if (/^http/.test(pic)) {
             return pic;

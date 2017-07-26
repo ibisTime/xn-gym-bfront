@@ -7,7 +7,7 @@ define([
     var _tmpl = __inline('../../ui/course-list-item.handlebars');
     var config = {
         start: 1,
-        limit: 10
+        limit: 20
     }, isEnd = false, canScrolling = false;
 
     init();
@@ -45,7 +45,7 @@ define([
     }
     function addListener() {
         //下拉加载
-        $(window).off("scroll").on("scroll", function() {
+        $(window).on("scroll", function() {
             if (canScrolling && !isEnd && ($(document).height() - $(window).height() - 10 <= $(document).scrollTop())) {
                 canScrolling = false;
                 showLoading();
