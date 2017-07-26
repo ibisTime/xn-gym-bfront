@@ -293,7 +293,7 @@ define([
         }
         param.label = label;
         var descPics = $("#descFile").data("pic");
-        descPics = descPics && descPics.split("||");
+        descPics = descPics && descPics.split("||") || [];
         param.description = base.getDescription(param.description, descPics);
         param.code = code;
         submit(param);
@@ -301,7 +301,7 @@ define([
 
     // 修改资料
     function submit(param) {
-        base.hideLoading("保存中...");
+        base.showLoading("保存中...");
         UserCtr.editCoach(param)
             .then((data) => {
                 base.hideLoading();

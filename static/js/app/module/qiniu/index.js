@@ -73,12 +73,13 @@ define(['app/interface/generalCtr'], function(generalCtr) {
                         option.hideUploadProgress && option.hideUploadProgress();
                     },
                     'Key': function(up, file) {
+                        console.log(up, file);
                         // 若想在前端对每个文件的key进行个性化处理，可以配置该函数
                         // 该配置必须要在 unique_names: false , save_key: false 时才生效
                         var sourceLink = file.name;
                         var suffix = sourceLink.slice(0, sourceLink.lastIndexOf('.'));
                         var suffix1 = sourceLink.slice(sourceLink.lastIndexOf('.') + 1);
-                        // suffix = suffix + "_" + (new Date().getTime());
+                        suffix = suffix + "_" + (new Date().getTime());
                         return suffix + "." + suffix1;
                     }
                 }

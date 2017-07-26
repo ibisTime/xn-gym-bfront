@@ -296,14 +296,14 @@ define([
         }
         param.label = label;
         var descPics = $("#descFile").data("pic");
-        descPics = descPics && descPics.split("||");
+        descPics = descPics && descPics.split("||") || [];
         param.description = base.getDescription(param.description, descPics);
         apply(param);
     }
 
     // 申请成为教练员
     function apply(param) {
-        base.hideLoading("提交中...");
+        base.showLoading("提交中...");
         UserCtr.apply(param)
             .then((data) => {
                 base.hideLoading();
