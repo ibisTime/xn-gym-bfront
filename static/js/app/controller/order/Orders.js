@@ -20,6 +20,7 @@ define([
             "0": "女",
             "1": "男"
         };
+    const SUFFIX = "?imageMogr2/auto-orient/thumbnail/!150x113r";
 
     init();
     function init(){
@@ -70,16 +71,15 @@ define([
                     <a href="./order.html?code=${item.code}" class="order-item-cont">
                         <div class="am-flexbox am-flexbox-align-top">
                             <div class="order-img">
-                                <img src="${base.getImg(item.coach.pic)}"/>
+                                <img src="${base.getImg(item.coach.pic, SUFFIX)}"/>
                             </div>
                             <div class="order-name-infos am-flexbox-item">
                                 <div class="am-flexbox am-flexbox-dir-column am-flexbox-justify-between am-flexbox-align-top">
                                     <div>
-                                        <h1>${item.coach.realName}</h1>
+                                        <h1>${item.realName}</h1>
                                         <div class="order-infos">
-                                            <span class="pdr">${item.skDatetime.substr(0, 5)}-${item.xkDatetime.substr(0, 5)}</span>
-                                            <span class="pdl pdr">${genderList[item.coach.gender]}</span>
-                                            <span class="pdl">${item.coach.star}分</span>
+                                            <span class="pdr">${base.formatDate(item.appointDatetime, "MM-dd")} ${item.skDatetime.substr(0, 5)}~${item.xkDatetime.substr(0, 5)}</span>
+                                            <span class="pdl">${item.quantity}人</span>
                                         </div>
                                     </div>
                                     <div class="order-addr">

@@ -10,7 +10,7 @@ define([
     }
     function createQRCode() {
         var qrCode = new QRCode('qrCode');
-        qrCode.makeCode(location.origin + '/user/register.html?userReferee=' + base.getUserId());
+        qrCode.makeCode(C_URL + '/user/redirect.html?userReferee=' + base.getUserId());
     }
     function calculate() {
         var winHeight = window.innerHeight,

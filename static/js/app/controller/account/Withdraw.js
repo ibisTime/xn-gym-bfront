@@ -12,17 +12,31 @@ define([
         base.showLoading();
         $.when(
             getBankCardList(),
-            getRate(),
+            getRules(),
             getAccount()
         ).then(() => {
             base.hideLoading();
             addListener();
         });
     }
-    function getRate() {
-        return GeneralCtr.getAccountSysConfig("BUSERQXFL").then((data) => {
-            rate = +data.cvalue;
-        });
+    // 获取提现规则
+    function getRules() {
+        return GeneralCtr.getPageAccountSysConfig()
+            .then((data) => {
+                data.list.forEach((rule) => {
+                    if(rule.ckey == "BUSERMONTIMES") {
+                        $("#rechargeTimes").text(rule.cvalue);
+                    } else if(rule.ckey == "BUSERQXBS") {
+                        $("#times").text(rule.cvalue);
+                    } else if(rule.ckey == "BUSERQXSX") {
+                        $("#toAccount").text(rule.cvalue);
+                    } else if(rule.ckey == "QXDBZDJE") {
+                        $("#maxAmount").text(rule.cvalue);
+                    } else if(rule.ckey == "BUSERQXFL") {   // 提现费率
+                        rate = +rule.cvalue;
+                    }
+                });
+            });
     }
     // 获取银行卡列表
     function getBankCardList(){
@@ -75,9 +89,8 @@ define([
             'rules': {
                 amount: {
                     required: true,
-                    withdraw: true,
                     ltR: true,
-                    maxAmount: true
+                    amount: true
                 },
                 payCardNo: {
                     required: true
@@ -106,22 +119,6 @@ define([
             }
             $("#fee").text(base.formatMoney(amount) + "元");
         });
-        $.validator.addMethod("withdraw", function(value, element) {
-            if(!/\d+/.test(value)) {
-                return false;
-            }
-            value = +value;
-            if(value % 5) {
-                return false;
-            }
-            return !!value;
-        }, '必须为5的倍数');
-        $.validator.addMethod("maxAmount", function(value, element) {
-            if($.isNumeric(value)) {
-                return +value <= 50000;
-            }
-            return false;
-        }, '单笔最高50000元');
         $.validator.addMethod("ltR", function(value, element) {
             value = +value;
             if(value * 1000 > remainAmount) {

@@ -36,6 +36,17 @@ define([
             });
         },
         /**
+         * 修改密码
+         * @param config: {newLoginPwd, oldLoginPwd}
+         */
+        changePwd: (config) => {
+            return Ajax.post("805049", {
+                userId: base.getUserId(),
+                loginPwdStrength: base.calculateSecurityLevel(config.newLoginPwd),
+                ...config
+            });
+        },
+        /**
          * 分页查询获客
          * @param config: {code,mobile?,smsCaptcha?,userReferee}
          */
@@ -80,7 +91,7 @@ define([
                 userId: base.getUserId()
             });
         },
-        // 设置交易密码
+        // 设置支付密码
         setTradePwd(tradePwd, smsCaptcha) {
             return Ajax.post('805045', {
                 tradePwd,

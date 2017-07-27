@@ -9,6 +9,7 @@ define([
     var code = base.getUrlParam("code"),
         count = 2,
         coachLabel;
+    var SUFFIX = "?imageMogr2/auto-orient/thumbnail/!200x200r";
     init();
     function init(){
         base.showLoading();
@@ -57,7 +58,7 @@ define([
                 code = data.code;
                 $("#realName").val(data.realName);
                 $("#avatar").data("pic", data.pic)
-                $("#avatarImg").attr("src", base.getImg(data.pic));
+                $("#avatarImg").attr("src", base.getImg(data.pic, SUFFIX));
                 $("#bannerFile").data("pic", data.advPic);
                 buildAdvImgs(data.advPic);
                 $("#age").val(data.age);
@@ -89,7 +90,7 @@ define([
         pics = pics.split("||");
         pics.forEach((pic) => {
             var _img = $(`<div class="img" id="${pic}">
-                        <div class="img-content"><img src="${base.getImg(pic)}"></div>
+                        <div class="img-content"><img src="${base.getImg(pic, SUFFIX)}"></div>
                         <i class="close-icon"></i>
                     </div>`);
             (function(_img, pic){
@@ -108,7 +109,7 @@ define([
     function buildDescImg(pic) {
         var _descFile = $("#descFile");
         var _img = $(`<div class="img" id="${pic}">
-                    <div class="img-content"><img src="${base.getImg(pic)}"></div>
+                    <div class="img-content"><img src="${base.getImg(pic, SUFFIX)}"></div>
                     <i class="close-icon"></i>
                 </div>`);
         _img.find('.close-icon').on('click', function (e) {
@@ -157,7 +158,7 @@ define([
             },
             fileUploaded: function(up, url, key, file){
                 $("#" + file.id).find(".img-content")
-                    .html(`<img src="${url}"/>`);
+                    .html(`<img src="${url + SUFFIX}"/>`);
 
                 var pic = _bannerFile.data("pic");
                 pic = pic ? pic + '||' + key : key;
@@ -193,7 +194,7 @@ define([
             },
             fileUploaded: function(up, url, key, file){
                 $("#" + file.id).find(".img-content")
-                    .html(`<img src="${url}"/>`);
+                    .html(`<img src="${url + SUFFIX}"/>`);
 
                 var pic = _descFile.data("pic");
                 pic = pic ? pic + '||' + key : key;
@@ -216,7 +217,7 @@ define([
             fileAdd: function(file, up){},
             fileUploaded: function(up, url, key, file){
                 _progressBar.css("width", "0");
-                _avatarImg.attr("src", url);
+                _avatarImg.attr("src", url + SUFFIX);
                 $("#avatar").data("pic", key);
             }
         });
@@ -233,6 +234,7 @@ define([
                 </div>`;
     }
     function addListener(){
+        alertModal.addCont();
         // 标签
         $("#labelWrapper").on("click", ".check-item", function() {
             var _this = $(this);

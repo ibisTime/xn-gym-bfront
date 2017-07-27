@@ -20,7 +20,7 @@ define([
                 base.hideLoading();
                 $("#code").text(data.code);
                 $("#applyDatetime").text(base.formatDate(data.applyDatetime, "yyyy-MM-dd hh:mm"));
-                // // status: 0 待付款，1 付款成功，2 已接单，3 已上课，4 已下课，5 用户取消，6 平台取消，7 已完成
+                // status: 0 待付款，1 付款成功，2 已接单，3 已上课，4 已下课，5 用户取消，6 平台取消，7 已完成
                 $("#status").text(orderStatus[data.status]);
                 address = data.address;
                 $("#address").text(address);
@@ -29,14 +29,14 @@ define([
                 $("#mobile").text(data.mobile);
                 $("#amount").text(base.formatMoney(data.amount) + "元");
                 $("#applyNote").text(data.applyNote || "无");
+                if(refresh) {
+                    $(".confirm-btn").find("button").addClass("hidden");
+                }
                 if(data.status == "1") {
-                    $(".am-button").addClass("hidden");
                     $("#cancelOrder, #takingOrder").removeClass("hidden");
                 } else if(data.status == "2") {
-                    $(".am-button").addClass("hidden");
-                    $("#startOrder, #takingOrder").removeClass("hidden");
+                    $("#startOrder").removeClass("hidden");
                 } else if(data.status == 3) {
-                    $(".am-button").addClass("hidden");
                     $("#endOrder").removeClass("hidden");
                 }
             });

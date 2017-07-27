@@ -1031,6 +1031,7 @@ label.error {
 
 .detail-description1 {
     padding: 0.3rem;
+    line-height: 1.5;
 }
 
 .member-list {
@@ -1058,6 +1059,8 @@ label.error {
         }
 
         .member-info {
+            line-height: 1.5;
+
             .member-phone {
                 font-size: 0.3rem;
             }
@@ -1109,4 +1112,13 @@ label.error {
             }
         }
     }
+}
+
+.reject-infos {
+    padding: 0.3rem;
+    margin-bottom: 0.2rem;
+    line-height: 1.4;
+    font-size: 0.24rem;
+    color: #fdaa3f;
+    background: #fffbed;
 }

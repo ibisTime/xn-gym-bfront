@@ -23,7 +23,7 @@ define([
         return AccountCtr.getAccount()
             .then((data) => {
                 data.forEach((account) => {
-                    if(account.currency === "CNY"){
+                    if(account.currency === "CNY") {
                         $("#amount").text(base.formatMoney(account.amount));
                     }
                 })
@@ -40,7 +40,7 @@ define([
                     alertModal.showCont("您的资料还在审批中，请耐心等待");
                 } else if(data.status == UNPASS) {
                     alertModal.showCont("非常抱歉，你的资料未通过审核。请修改资料后，重新提交申请", () => {
-                        location.href = "./user/apply.html?code=1";
+                        location.href = "./user/edit.html?code=1";
                     });
                 }
             }, (error, d) => {
@@ -96,7 +96,7 @@ define([
             location.href = "./user/set.html";
         });
         // 资金流水
-        $("#goFlow").click(function() {
+        $("#amount").click(function() {
             location.href = "./account/flow.html";
         });
     }
@@ -131,7 +131,7 @@ define([
         // 未通过审核
         }else if(passStatus == UNPASS) {
             alertModal.showCont("非常抱歉，你的资料未通过审核。请修改资料后，重新提交申请", () => {
-                location.href = "./user/apply.html?code=1";
+                location.href = "./user/edit.html?code=1";
             });
         }
     }

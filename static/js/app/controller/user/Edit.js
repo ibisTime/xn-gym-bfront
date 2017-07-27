@@ -5,7 +5,8 @@ define([
     'app/module/qiniu',
     'app/module/validate'
 ], function(base, GeneralCtr, UserCtr, qiniu, Validate) {
-    var code, coachLabel;
+    var code, coachLabel, status;
+    var SUFFIX = "?imageMogr2/auto-orient/thumbnail/!200x200r";
     init();
     function init(){
         base.showLoading();
@@ -55,9 +56,13 @@ define([
         return UserCtr.getCoachByUserId(base.getUserId())
             .then((data) => {
                 code = data.code;
+                status = data.status;
+                if(status == "2" && data.remark) {
+                    $("#remark").text(data.remark).parent().removeClass("hidden");
+                }
                 $("#realName").val(data.realName);
                 $("#avatar").data("pic", data.pic)
-                $("#avatarImg").attr("src", base.getImg(data.pic));
+                $("#avatarImg").attr("src", base.getImg(data.pic, SUFFIX));
                 $("#bannerFile").data("pic", data.advPic);
                 buildAdvImgs(data.advPic);
                 $("#age").val(data.age);
@@ -95,7 +100,7 @@ define([
         pics = pics.split("||");
         pics.forEach((pic) => {
             var _img = $(`<div class="img" id="${pic}">
-                        <div class="img-content"><img src="${base.getImg(pic)}"></div>
+                        <div class="img-content"><img src="${base.getImg(pic, SUFFIX)}"></div>
                         <i class="close-icon"></i>
                     </div>`);
             (function(_img, pic){
@@ -114,7 +119,7 @@ define([
     function buildDescImg(pic) {
         var _descFile = $("#descFile");
         var _img = $(`<div class="img" id="${pic}">
-                    <div class="img-content"><img src="${base.getImg(pic)}"></div>
+                    <div class="img-content"><img src="${base.getImg(pic, SUFFIX)}"></div>
                     <i class="close-icon"></i>
                 </div>`);
         _img.find('.close-icon').on('click', function (e) {
@@ -154,7 +159,7 @@ define([
             },
             fileUploaded: function(up, url, key, file){
                 $("#" + file.id).find(".img-content")
-                    .html(`<img src="${url}"/>`);
+                    .html(`<img src="${url + SUFFIX}"/>`);
 
                 var pic = _bannerFile.data("pic");
                 pic = pic ? pic + '||' + key : key;
@@ -190,7 +195,7 @@ define([
             },
             fileUploaded: function(up, url, key, file){
                 $("#" + file.id).find(".img-content")
-                    .html(`<img src="${url}"/>`);
+                    .html(`<img src="${url + SUFFIX}"/>`);
 
                 var pic = _descFile.data("pic");
                 pic = pic ? pic + '||' + key : key;
@@ -213,7 +218,7 @@ define([
             fileAdd: function(file, up){},
             fileUploaded: function(up, url, key, file){
                 _progressBar.css("width", "0");
-                _avatarImg.attr("src", url);
+                _avatarImg.attr("src", url + SUFFIX);
                 $("#avatar").data("pic", key);
             }
         });
@@ -301,11 +306,19 @@ define([
 
     // 修改资料
     function submit(param) {
-        base.showLoading("保存中...");
+        if(status == "2") {
+            base.showLoading("提交中...");
+        } else {
+            base.showLoading("保存中...");
+        }
         UserCtr.editCoach(param)
             .then((data) => {
                 base.hideLoading();
-                base.showMsg("保存成功");
+                if(status == "2") {
+                    base.showMsg("申请提交成功");
+                } else {
+                    base.showMsg("保存成功");
+                }
                 setTimeout(() => {
                     location.href = "../index.html";
                 }, 500);
