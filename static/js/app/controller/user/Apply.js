@@ -71,7 +71,8 @@ define([
                     buildDescImg(pic);
                     descPics.push(pic);
                     return "";
-                }).replace(/&nbsp;/ig, " ").replace(/<br\/>/ig, "\n");
+                }).replace(/&nbsp;/ig, " ");
+                description = base.decode(description);
                 descPics = descPics.length ? descPics.join("||") : "";
                 $("#descFile").data("pic", descPics);
                 $("#description").val(description);

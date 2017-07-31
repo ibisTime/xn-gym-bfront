@@ -66,7 +66,7 @@ define([
                     clearSessionUser();
                     sessionStorage.setItem("l-return", location.pathname + location.search);
                     setTimeout(function() {
-                        location.replace("../user/redirect.htm");
+                        location.replace("../user/login.html");
                     }, 500);
                     var d = showMsg("登录超时");
                     return $.Deferred().reject("登录超时", d);

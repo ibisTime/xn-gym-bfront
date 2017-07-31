@@ -155,6 +155,9 @@ define([
         },
         // 获取图片
         getImg: function(pic, suffix) {
+            if (!pic) {
+                return "";
+            }
             if (pic) {
                 pic = pic.split(/\|\|/)[0];
             }
@@ -262,12 +265,32 @@ define([
                 pic_html += `<img src="${PIC_PREFIX + pic}"/>`;
             });
             description = description.replace(/\n/g, "<br/>").replace(/\s/g, "&nbsp;");
+            description = Base.encode(description);
             description += pic_html;
             return description;
         },
-        // 把html解析成文本和图片
-        decodeDescription: function(description) {
-            // var decodeDescription
+        encode: function(str) {
+            if (!str || str.length === 0) {
+                return '';
+            }
+            var s = '';
+            s = str.replace(/&amp;/g, "&");
+            s = s.replace(/<(?=[^o][^)])/g, "&lt;");
+            s = s.replace(/>/g, "&gt;");
+            s = s.replace(/\"/g, "&quot;");
+            s = s.replace(/\n/g, "<br/>");
+            return s;
+        },
+        decode: function(str) {
+            if (!str || str.length === 0) {
+                return '';
+            }
+            var s = '';
+            s = str.replace(/&lt;/g, "<");
+            s = s.replace(/&gt;/g, ">");
+            s = s.replace(/&quot;/g, "\"");
+            s = s.replace(/<br\/>/g, "\n");
+            return s;
         }
     };
 

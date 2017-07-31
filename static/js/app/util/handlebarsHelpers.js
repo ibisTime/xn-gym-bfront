@@ -25,7 +25,7 @@ define([
         if (/^http/.test(pic)) {
             return pic;
         }
-        return PIC_PREFIX + pic;
+        return PIC_PREFIX + pic + "?imageMogr2/auto-orient/thumbnail/!200x200r";
     });
     Handlebars.registerHelper('formatDateTime', function(date, options) {
         if (!date)

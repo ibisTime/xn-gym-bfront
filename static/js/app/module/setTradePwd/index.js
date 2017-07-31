@@ -39,7 +39,7 @@ define([
                 $("body").append(tmpl);
             }
             var wrap = $("#setTradePwdWrap");
-            defaultOpt.title && wrap.find(".right-left-cont-title-name").html(defaultOpt.title);
+            defaultOpt.title && wrap.find(".right-left-cont-title-name").text(defaultOpt.title);
             var that = this;
             $("#setTradePwdMobile").val(defaultOpt.mobile);
             if(first){

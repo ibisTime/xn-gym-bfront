@@ -26,14 +26,14 @@ define([
                     if(account.currency === "CNY") {
                         $("#amount").text(base.formatMoney(account.amount));
                     }
-                })
+                });
             });
     }
     // 根据userId查询教练
     function getCoachByUserId() {
         return UserCtr.getCoachByUserId(base.getUserId())
             .then((data) => {
-                $("#avatar").attr("src", base.getImg(data.pic));
+                $("#avatar").attr("src", base.getAvatar(data.pic));
                 passStatus = data.status;
                 // 0待审批，1 审批通过，2 审批不通过
                 if(data.status == PASSING) {

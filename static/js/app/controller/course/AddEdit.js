@@ -121,7 +121,6 @@ define([
         });
         $("#saveBtn").click(function(){
             if(_formWrapper.valid()){
-                base.showLoading("保存中...");
                 beforeSubmit(_formWrapper.serializeObject());
             }
         });
@@ -129,12 +128,18 @@ define([
             $("#week").text($(this).find("option:selected").text());
         });
     }
+    // 提交数据前的校验和拼装
     function beforeSubmit(param) {
         var skStartDatetime = param.skStartDatetime.split(/\s:\s/);
         skStartDatetime.push("00");
-        param.skStartDatetime = skStartDatetime.join(":");
         var skEndDatetime = param.skEndDatetime.split(/\s:\s/);
         skEndDatetime.push("00");
+        if(!isLegalTime(skStartDatetime, skEndDatetime)) {
+            base.showMsg("上课时间不能大于下课时间");
+            return;
+        }
+        base.showLoading("保存中...");
+        param.skStartDatetime = skStartDatetime.join(":");
         param.skEndDatetime = skEndDatetime.join(":");
         param.coachCode = coachCode;
         param.price = +param.price * 1000;
@@ -144,6 +149,19 @@ define([
         } else {
             addCourse(param);
         }
+    }
+    // 判断上课和下课时间是否合理
+    function isLegalTime(skStartDatetime, skEndDatetime) {
+        if(!skEndDatetime || !skStartDatetime) {
+            return false;
+        }
+        if(skStartDatetime[0] > skEndDatetime[0]) {
+            return false;
+        }
+        if(skStartDatetime[0] == skEndDatetime[0] && skStartDatetime[1] >= skEndDatetime[1]) {
+            return false;
+        }
+        return true;
     }
     function addCourse(param) {
         CourseCtr.addCourse(param)

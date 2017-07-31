@@ -35,7 +35,7 @@ define([
                 if(data.status == "1") {
                     $("#cancelOrder, #takingOrder").removeClass("hidden");
                 } else if(data.status == "2") {
-                    $("#startOrder").removeClass("hidden");
+                    $("#cancelOrder, #startOrder").removeClass("hidden");
                 } else if(data.status == 3) {
                     $("#endOrder").removeClass("hidden");
                 }
