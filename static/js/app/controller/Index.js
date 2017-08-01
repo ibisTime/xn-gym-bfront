@@ -45,6 +45,7 @@ define([
                 }
             }, (error, d) => {
                 d && d.close();
+                $("#avatar").attr("src", base.getAvatar());
                 base.confirm("您需要先完善个人资料并在通过审核后，<br/>才可以使用本系统")
                     .then(() => {
                         location.href = "./user/apply.html";
