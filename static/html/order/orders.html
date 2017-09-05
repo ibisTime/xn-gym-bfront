@@ -4,18 +4,23 @@
 <head>
     <link rel="import" href="../head.html?__inline">
     <title>接单管理</title>
+    <link rel="stylesheet" href="../../js/lib/j_picker/jquery-weui.min.css">
     <!--SCRIPT_PLACEHOLDER-->
 </head>
 
 <body>
-    <div class="course-orders-wrap am-tabs am-tabs-top" id="orderWrapper">
+    <div class="course-orders-wrap coach-orders-wrap am-tabs-top" id="orderWrapper">
         <div id="am-tabs-bar" class="am-tabs-bar">
-            <div class="am-tabs-ink-bar am-tabs-ink-bar-animated" style="transform: translate3d(0px, 0px, 0px); width: 1.5rem;"></div>
-            <div class="am-tabs-tab-active am-tabs-tab">全部</div>
-            <div class="am-tabs-tab">待处理</div>
-            <div class="am-tabs-tab">已接单</div>
-            <div class="am-tabs-tab">已上课</div>
-            <div class="am-tabs-tab">已完成</div>
+            <div class="scroll-content">
+                <div class="am-tabs-tab-active am-tabs-tab">全部</div>
+                <div class="am-tabs-tab">待付款</div>
+                <div class="am-tabs-tab">待接单</div>
+                <div class="am-tabs-tab">待上课</div>
+                <div class="am-tabs-tab">待填表</div>
+                <div class="am-tabs-tab">待下课</div>
+                <div class="am-tabs-tab">待评价</div>
+                <div class="am-tabs-tab">已完成</div>
+            </div>
         </div>
         <div id="am-tabs-content" class="am-tabs-content am-tabs-content-animated" style="transform: translateX(0%) translateZ(0px); touch-action: pan-y; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
             <div class="am-tabs-tabpane">
@@ -58,9 +63,34 @@
                     <span>已经全部加载完毕</span>
                 </div>
             </div>
+            <div class="am-tabs-tabpane am-tabs-tabpane-inactive">
+                <div class="orders-list" id="content5"></div>
+                <div id="loadingWrap5" class="loading-item hidden"><i class="global-loading-icon1"></i><span>加载中...</span></div>
+                <div id="loadAll5" class="load-all hidden">
+                    <img src="../../images/end.png">
+                    <span>已经全部加载完毕</span>
+                </div>
+            </div>
+            <div class="am-tabs-tabpane am-tabs-tabpane-inactive">
+                <div class="orders-list" id="content6"></div>
+                <div id="loadingWrap6" class="loading-item hidden"><i class="global-loading-icon1"></i><span>加载中...</span></div>
+                <div id="loadAll6" class="load-all hidden">
+                    <img src="../../images/end.png">
+                    <span>已经全部加载完毕</span>
+                </div>
+            </div>
+            <div class="am-tabs-tabpane am-tabs-tabpane-inactive">
+                <div class="orders-list" id="content7"></div>
+                <div id="loadingWrap7" class="loading-item hidden"><i class="global-loading-icon1"></i><span>加载中...</span></div>
+                <div id="loadAll7" class="load-all hidden">
+                    <img src="../../images/end.png">
+                    <span>已经全部加载完毕</span>
+                </div>
+            </div>
         </div>
     </div>
     <link rel="import" href="../footer.html?__inline">
+    <script src="../../js/lib/j_picker/jquery-weui.min.js"></script>
     <script>
         require(['app/controller/order/Orders']);
     </script>

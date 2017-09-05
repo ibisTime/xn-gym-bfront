@@ -1,0 +1,102 @@
+.read-report-wrapper {
+    position: fixed;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    z-index: 1024;
+    overflow: auto;
+    background-color: #f0f0f0;
+}
+
+.read-report-wrapper .model-title {
+    height: 0.8rem;
+    line-height: 0.8rem;
+    font-size: 0.32rem;
+    color: #000;
+    position: relative;
+    border-bottom: 1px solid #ededed;
+    background-color: #fff;
+    margin-bottom: 0.1rem;
+    text-align: center;
+}
+
+.read-report-wrapper .model-title .close {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    left: 0;
+    top: 0;
+}
+.read-report-wrapper .model-title .close-icon {
+    position: absolute;
+    width: 3px;
+    height: 30px;
+    background: #666;
+    top: 5px;
+    left: 18px;
+}
+.read-report-wrapper .model-title .close-icon.close-icon0 {
+    transform: rotateZ(45deg);
+}
+
+.read-report-wrapper .model-title .close-icon.close-icon1 {
+    transform: rotateZ(-45deg);
+}
+
+.read-report-wrapper .info-item {
+    position: relative;
+    padding: 0.3rem;
+    background: #fff;
+    border-bottom: 1px solid #eee;
+}
+
+.read-report-wrapper .info-item .right-arrow {
+    height: 1em;
+}
+
+.read-report-wrapper .info-item .title {
+    width: 1.2rem;
+    margin-right: 0.4rem;
+    font-size: 0.3rem;
+}
+
+.read-report-wrapper .info-item .input-item {
+    flex: 1;
+    font-size: 0.3rem;
+    color: #333;
+}
+
+.read-report-wrapper .info-item .input-item.mb {
+     margin-bottom: -0.2rem;
+}
+
+.read-report-wrapper .info-item .textarea {
+    margin: 0.14rem 0 0.3rem;
+}
+
+.read-report-wrapper .info-item .textarea textarea {
+    width: 100%;
+    font-size: 0.3rem;
+    color: #333;
+}
+
+.read-report-wrapper .info-btns {
+    padding: 0.1rem 0.3rem 0.15rem;
+}
+
+.read-report-wrapper .module-form-wrapper h1 {
+    padding: 0.2rem 0.3rem;
+    font-size: 0.32rem;
+}
+
+.read-report-wrapper .module-form-wrapper {
+    position: absolute;
+    top: 0.9rem;
+    left: 0;
+    width: 100%;
+    bottom: 0;
+    z-index: 1111;
+    overflow: auto;
+}

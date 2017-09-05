@@ -67,6 +67,7 @@ define([
         getPageOrders(config, refresh) {
             return Ajax.get("622132", {
                 toUser:  base.getUserId(),
+                type: 0,
                 orderColumn: "apply_datetime",
                 orderDir: "desc",
                 ...config
@@ -76,5 +77,14 @@ define([
         getOrder(code, refresh) {
             return Ajax.get("622131", {code}, refresh);
         },
+        // 填写表格
+        saveReport(orderCode, sizeDataList, remark) {
+            return Ajax.post("622127", {
+                orderCode,
+                sizeDataList,
+                remark,
+                updater: base.getUserId()
+            });
+        }
     };
 })

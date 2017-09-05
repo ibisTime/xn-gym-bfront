@@ -2,11 +2,13 @@ define([
     'app/controller/base',
     'app/interface/CourseCtr',
     'app/module/showInMap',
+    'app/module/readReport',
+    'app/module/writeReport',
     'app/util/dict'
-], function(base, CourseCtr, showInMap, Dict) {
+], function(base, CourseCtr, showInMap, readReport, writeReport, Dict) {
     var code = base.getUrlParam("code"),
         orderStatus = Dict.get("coachOrderStatus");
-    var address;
+    var address, sizeDataList, remark;
 
     init();
     function init(){
@@ -20,7 +22,7 @@ define([
                 base.hideLoading();
                 $("#code").text(data.code);
                 $("#applyDatetime").text(base.formatDate(data.applyDatetime, "yyyy-MM-dd hh:mm"));
-                // status: 0 待付款，1 付款成功，2 已接单，3 已上课，4 已下课，5 用户取消，6 平台取消，7 已完成
+                // status: 0 待付款，1 待接单，2 待上课，3 待填表，4 待下课，5 待评价，6 用户取消，7 私教取消, 8 已完成
                 $("#status").text(orderStatus[data.status]);
                 address = data.address;
                 $("#address").text(address);
@@ -37,11 +39,27 @@ define([
                 } else if(data.status == "2") {
                     $("#cancelOrder, #startOrder").removeClass("hidden");
                 } else if(data.status == 3) {
-                    $("#endOrder").removeClass("hidden");
+                    $("#writeReport").removeClass("hidden");
+                } else {
+                    if (data.sizeDataList.length) {
+                        sizeDataList = data.sizeDataList;
+                        remark = data.remark;
+                        $("#readReport").removeClass("hidden");
+                    }
+                    if(data.status == 4) {
+                        $("#endOrder").removeClass("hidden");
+                    }
                 }
             });
     }
     function addListener(){
+        writeReport.addCont({
+            hideFn: function() {
+                base.showLoading();
+                getOrder(true);
+            }
+        });
+        readReport.addCont();
         showInMap.addMap();
         // 接单
         $("#takingOrder").on("click", function() {
@@ -94,6 +112,12 @@ define([
                             getOrder(true);
                         });
                 }, () => {});
+        });
+        $("#writeReport").on("click", function() {
+            writeReport.showCont(code);
+        });
+        $("#readReport").on("click", function() {
+            readReport.showCont(sizeDataList, remark);
         });
         $("#address").on("click", function() {
             showInMap.showMapByName(address);

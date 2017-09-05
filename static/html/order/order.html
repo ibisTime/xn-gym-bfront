@@ -4,6 +4,7 @@
 <head>
     <link rel="import" href="../head.html?__inline">
     <title>订单详情</title>
+    <link rel="stylesheet" href="../../js/lib/j_picker/jquery-weui.min.css">
     <!--SCRIPT_PLACEHOLDER-->
 </head>
 
@@ -71,10 +72,13 @@
             <button type="button" class="am-button am-button-primary hidden" id="takingOrder">确认接单</button>
             <button type="button" class="am-button am-button-primary hidden" id="startOrder">上课</button>
             <button type="button" class="am-button am-button-primary hidden" id="endOrder">下课</button>
+            <button type="button" class="am-button am-button-primary hidden" id="writeReport">填写报告</button>
+            <button type="button" class="am-button am-button-primary hidden" id="readReport">查看报告</button>
             <button type="button" class="am-button am-button-ghost am-button-cancel hidden" id="cancelOrder">取消</button>
         </div>
     </div>
     <link rel="import" href="../footer.html?__inline">
+    <script src="../../js/lib/j_picker/jquery-weui.min.js"></script>
     <script src="//api.map.baidu.com/api?v=2.0&ak=GZO262tQ251t2DsFWsQy7A7swoQ4MgyB&s=1"></script>
     <script>
         require(['app/controller/order/Order']);

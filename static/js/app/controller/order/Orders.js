@@ -1,32 +1,56 @@
 define([
     'app/controller/base',
     'app/util/dict',
-    'app/interface/CourseCtr'
-], function(base, Dict, CourseCtr) {
+    'app/interface/CourseCtr',
+    'app/module/scroll',
+    'app/module/writeReport'
+], function(base, Dict, CourseCtr, scroll, writeReport) {
     var config = {
         start: 1,
         limit: 10
     }, isEnd = false, canScrolling = false;
     var orderStatus = Dict.get("coachOrderStatus");
     var currentType = 0,
-        // status: 0 待付款，1 付款成功，2 已接单，3 已上课，4 已下课，5 用户取消，6 平台取消，7 已完成
+        // status: 0 待付款，1 待接单，2 待上课，3 待填表，4 待下课，5 待评价，6 用户取消，7 私教取消, 8 已完成
         type2Status = {
             "0": "",
-            "1": "1",
-            "2": "2",
-            "3": "3",
-            "4": "7"
-        }, genderList = {
-            "0": "女",
-            "1": "男"
+            "1": "0",
+            "2": "1",
+            "3": "2",
+            "4": "3",
+            "5": "4",
+            "6": "5",
+            "7": "8"
         };
     const SUFFIX = "?imageMogr2/auto-orient/thumbnail/!150x113r";
+    var myScroll;
 
     init();
     function init(){
+        initScroll();
         addListener();
         base.showLoading();
         getPageOrders();
+    }
+    function initScroll() {
+        var width = 0;
+        var _wrap = $("#am-tabs-bar");
+        _wrap.find('.am-tabs-tab').each(function () {
+            width += this.clientWidth;
+        });
+        _wrap.find('.scroll-content').css('width', width + 'px');
+        myScroll = scroll.getInstance().getScrollByParam({
+            id: 'am-tabs-bar',
+            param: {
+                scrollX: true,
+                scrollY: false,
+                eventPassthrough: true,
+                snap: true,
+                hideScrollbar: true,
+                hScrollbar: false,
+                vScrollbar: false
+            }
+        });
     }
     // 分页查询课程
     function getPageOrders(refresh) {
@@ -75,11 +99,13 @@ define([
                             </div>
                             <div class="order-name-infos am-flexbox-item">
                                 <div class="am-flexbox am-flexbox-dir-column am-flexbox-justify-between am-flexbox-align-top">
-                                    <div>
-                                        <h1>${item.realName}</h1>
+                                    <div class="order-inner-content">
+                                        <div class="title-cont">
+                                            <span class="title">${item.realName}</span>
+                                            <div class="order-status">${orderStatus[item.status]}</div>
+                                        </div>
                                         <div class="order-infos">
-                                            <span class="pdr">${base.formatDate(item.appointDatetime, "MM-dd")} ${item.skDatetime.substr(0, 5)}~${item.xkDatetime.substr(0, 5)}</span>
-                                            <span class="pdl">${item.quantity}人</span>
+                                            <span class="pdr">${base.formatDate(item.appointDatetime, "MM-dd")} ${item.skDatetime.substr(0, 5)}~${item.xkDatetime.substr(0, 5)}</span><span class="pdr pdl">${item.quantity}人</span><span class="pdl">¥${base.formatMoney(item.amount)}</span>
                                         </div>
                                     </div>
                                     <div class="order-addr">
@@ -87,11 +113,10 @@ define([
                                     </div>
                                 </div>
                             </div>
-                            <div class="order-status">${orderStatus[item.status]}</div>
                         </div>
                     </a>
                     ${
-                        item.status == "1" || item.status == "2" || item.status == "3"
+                        item.status == "1" || item.status == "2" || item.status == "3" || item.status == "4"
                             ? `<div class="order-item-footer">
                                     ${
                                         item.status == "1"
@@ -100,31 +125,35 @@ define([
                                             : item.status == "2"
                                                 ? `<button class="am-button am-button-small start-order" data-code="${item.code}">上课</button>
                                                     <button class="am-button am-button-small cancel-order" data-code="${item.code}">取消订单</button>`
-                                                : `<button class="am-button am-button-small end-order" data-code="${item.code}">下课</button>`
+                                                : item.status == "3"
+                                                    ? `<button class="am-button am-button-small write-order" data-code="${item.code}">填表</button>`
+                                                    : `<button class="am-button am-button-small end-order" data-code="${item.code}">下课</button>`
                                     }
                                 </div>`
                             : ''
                     }
                 </div>`;
-        // status: 0 待付款，1 付款成功，2 已接单，3 已上课，4 已下课，5 用户取消，6 平台取消，7 已完成
+        // status: 0 待付款，1 待接单，2 待上课，3 待填表，4 待下课，5 待评价，6 用户取消，7 私教取消, 8 已完成
     }
 
     function addListener(){
+        writeReport.addCont({
+            hideFn: function() {
+                base.showLoading();
+                config.start = 1;
+                getPageOrders(true);
+            }
+        });
         // tabs切换事件
-        var _tabsInkBar = $("#am-tabs-bar").find(".am-tabs-ink-bar"),
-            _tabpanes = $("#am-tabs-content").find(".am-tabs-tabpane");
+        var _tabpanes = $("#am-tabs-content").find(".am-tabs-tabpane");
         $("#am-tabs-bar").on("click", ".am-tabs-tab", function(){
-            var _this = $(this), index = _this.index() - 1;
-            if(!_this.hasClass("am-tabs-tab-active")){
+            var _this = $(this), index = _this.index();
+            if(!_this.hasClass("am-tabs-tab-active")) {
                 _this.addClass("am-tabs-tab-active")
                     .siblings(".am-tabs-tab-active").removeClass("am-tabs-tab-active");
-                _tabsInkBar.css({
-                    "-webkit-transform": "translate3d(" + index * 1.5 + "rem, 0px, 0px)",
-                    "-moz-transform": "translate3d(" + index * 1.5 + "rem, 0px, 0px)",
-                    "transform": "translate3d(" + index * 1.5 + "rem, 0px, 0px)"
-                });
                 _tabpanes.eq(index).removeClass("am-tabs-tabpane-inactive")
                     .siblings().addClass("am-tabs-tabpane-inactive");
+                myScroll.myScroll.scrollToElement(_this[0], 200, true);
                 // 当前选择查看的订单tab的index
                 currentType = index;
                 config.start = 1;
@@ -177,6 +206,11 @@ define([
                         });
                 }, () => {});
         });
+        // 填表
+        $("#orderWrapper").on("click", ".write-order", function() {
+            var orderCode = $(this).attr("data-code");
+            writeReport.showCont(orderCode);
+        });
         // 下课
         $("#orderWrapper").on("click", ".end-order", function() {
             var orderCode = $(this).attr("data-code");
@@ -196,7 +230,6 @@ define([
         $(window).on("scroll", function() {
             if (canScrolling && !isEnd && ($(document).height() - $(window).height() - 10 <= $(document).scrollTop())) {
                 canScrolling = false;
-                var choseIndex = $(".am-tabs-tab-active").index() - 1;
                 showLoading();
                 getPageOrders();
             }
