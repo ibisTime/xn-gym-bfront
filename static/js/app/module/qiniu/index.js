@@ -4,12 +4,9 @@ define(['app/interface/generalCtr'], function(generalCtr) {
             return generalCtr.getQiniuToken();
         },
         uploadInit: function(option) {
-            // this 即 editor 对象
             // 触发选择文件的按钮的id
             var btnId = option.btnId;
             var token = option.token;
-            //触发上传的按钮id
-            var starBtnId = option.starBtnId;
             // 触发选择文件的按钮的父容器的id
             var containerId = option.containerId;
             var multi_selection = option.multi_selection || false;
@@ -29,17 +26,9 @@ define(['app/interface/generalCtr'], function(generalCtr) {
                 domain: PIC_PREFIX,
                 //bucket 域名，下载资源时用到，**必需**
                 container: containerId, //上传区域DOM ID，默认是browser_button的父元素，
-                max_file_size: '100mb', //最大文件体积限制
+                max_file_size: '10mb', //最大文件体积限制
                 flash_swf_url: __uri("../../lib/qiniu/Moxie.swf"), //引入flash,相对路径
                 multi_selection: multi_selection,
-                filters: {
-                    mime_types: [//只允许上传图片文件 （注意，extensions中，逗号后面不要加空格）
-                        {
-                            title: "图片文件",
-                            extensions: "jpg,jpeg,gif,png,bmp"
-                        }
-                    ]
-                },
                 max_retries: 3, //上传失败最大重试次数
                 chunk_size: '4mb', //分块上传时，每片的体积
                 auto_start: true, //选择文件后自动上传，若关闭需要自己绑定事件触发上传
@@ -67,13 +56,13 @@ define(['app/interface/generalCtr'], function(generalCtr) {
                     },
                     'Error': function(up, err, errTip) {
                         //上传出错时,处理相关的事情
+                        alert(errTip);
                     },
                     'UploadComplete': function() {
                         // 隐藏进度条
                         option.hideUploadProgress && option.hideUploadProgress();
                     },
                     'Key': function(up, file) {
-                        console.log(up, file);
                         // 若想在前端对每个文件的key进行个性化处理，可以配置该函数
                         // 该配置必须要在 unique_names: false , save_key: false 时才生效
                         var sourceLink = file.name;

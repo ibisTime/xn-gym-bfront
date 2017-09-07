@@ -33,6 +33,7 @@ define([
                     } else if(rule.ckey == "QXDBZDJE") {
                         $("#maxAmount").text(rule.cvalue);
                     } else if(rule.ckey == "BUSERQXFL") {   // 提现费率
+                        $("#toRate").text(rule.cvalue);
                         rate = +rule.cvalue;
                     }
                 });

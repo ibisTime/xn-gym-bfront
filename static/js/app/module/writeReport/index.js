@@ -15,18 +15,14 @@ define([
     }
 
     function saveReport(dataList) {
-        var sizeDataList = [], remark = '';
+        var sizeDataList = [];
         for(var ckey in dataList) {
-            if (ckey != 'BZ') {
-                sizeDataList.push({
-                    ckey,
-                    cvalue: dataList[ckey]
-                });
-            } else {
-                remark = dataList[ckey];
-            }
+            sizeDataList.push({
+                ckey,
+                cvalue: dataList[ckey]
+            });
         }
-        CourseCtr.saveReport(defaultOpt.orderCode, sizeDataList, remark)
+        CourseCtr.saveReport(defaultOpt.orderCode, sizeDataList)
             .then((data) => {
                 loading.hideLoading();
                 ModuleObj.hideCont(defaultOpt.hideFn);
@@ -87,7 +83,7 @@ define([
                           required: true
                       },
                       SBSQK: {
-                          required: true,
+                          // required: true,
                           isNotFace: true
                       },
                       JB: {

@@ -24,18 +24,18 @@
 
 .read-report-wrapper .model-title .close {
     position: absolute;
-    width: 40px;
-    height: 40px;
+    width: 0.8rem;
+    height: 0.8rem;
     left: 0;
     top: 0;
 }
 .read-report-wrapper .model-title .close-icon {
     position: absolute;
     width: 3px;
-    height: 30px;
+    height: 0.6rem;
     background: #666;
-    top: 5px;
-    left: 18px;
+    top: 0.1rem;
+    left: 0.36rem;
 }
 .read-report-wrapper .model-title .close-icon.close-icon0 {
     transform: rotateZ(45deg);

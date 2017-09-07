@@ -17,7 +17,7 @@ define([
     //公告
     function getPageNotice(refresh) {
         base.showLoading();
-    	GeneralCtr.getPageSysNotice(config, refresh)
+        GeneralCtr.getPageSysNotice(config, refresh)
             .then(function(data) {
                 base.hideLoading();
                 hideLoading();
@@ -26,10 +26,10 @@ define([
                 if (totalCount <= config.limit || lists.length < config.limit) {
                     isEnd = true;
                 }
-    			if(data.list.length) {
+          			if(data.list.length) {
                     $("#content").append(_tmpl({items: data.list}));
                     isEnd && $("#loadAll").removeClass("hidden");
-    			} else if(config.start == 1) {
+          			} else if(config.start == 1) {
                     $("#content").html('<li class="no-data">暂无公告</li>')
                 } else {
                     $("#loadAll").removeClass("hidden");
