@@ -8,7 +8,7 @@
 </head>
 
 <body>
-    <div class="user-info-wrapper">
+    <div class="user-info-wrapper" id="userInfoWrapper">
         <div class="reject-infos hidden">审核不通过原因：<span id="remark"></span></div>
         <form class="info-list" id="formWrapper">
             <div class="info-item border-bottom-1px">
@@ -21,7 +21,7 @@
                 <div class="am-flexbox" id="avatarWrapper">
                     <span class="title">头像</span>
                     <div class="input-item right-img">
-                        <input type="file" id="avatar"/>
+                        <input type="file" accept="image/*" id="avatar"/>
                         <img id="avatarImg" src="../../images/图片-(1)@2x.png?__inline">
                     </div>
                     <i class="right-arrow"></i>
