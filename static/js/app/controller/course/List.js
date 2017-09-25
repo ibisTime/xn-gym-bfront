@@ -22,7 +22,7 @@ define([
     }
     // 私课
     function getPageCourse(refresh) {
-    	CourseCtr.getPageCourse(config, refresh)
+        CourseCtr.getPageCourse(config, refresh)
             .then(function(data) {
                 base.hideLoading();
                 hideLoading();
@@ -31,11 +31,11 @@ define([
                 if (totalCount <= config.limit || lists.length < config.limit) {
                     isEnd = true;
                 }
-    			if(data.list.length) {
+          			if(data.list.length) {
                     $("#content").append(_tmpl({items: data.list}));
                     isEnd && $("#loadAll").removeClass("hidden");
                     config.start++;
-    			} else if(config.start == 1) {
+          			} else if(config.start == 1) {
                     $("#content").html('<li class="no-data">暂无课程</li>')
                 } else {
                     $("#loadAll").removeClass("hidden");

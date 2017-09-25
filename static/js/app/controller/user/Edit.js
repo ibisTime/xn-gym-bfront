@@ -228,7 +228,7 @@ define([
                     rules.gender = {
                         required: true
                     };
-                    $("#pdfOutWrapper").removeClass('hidden');
+                    $("#pdfWrapper").removeClass('hidden');
                     initImgUpload(PDF);
                     $("#pdfFile").data("pic", data.pdf);
                     buildPDFImgs(data.pdf);
@@ -236,6 +236,11 @@ define([
                       $("#remark").text(data.remark).parent().removeClass("hidden");
                     }
                 } else {
+                    if (data.pdf) {
+                        buildPDFImgs(data.pdf, true);
+                    } else {
+                        $('#pdfOutWrapper').addClass('hidden');
+                    }
                     $("#realName").remove();
                     $("#realName1").text(data.realName);
                     $("#gender").remove();
@@ -267,6 +272,10 @@ define([
                 if (description) {
                     var descPics = [];
                     description = description.replace(/<img\s+src="([^"]+)"\s*\/>/ig, function(img, pic){
+                        var index = pic.indexOf('?imageMogr2/auto-orient');
+                        if (~index) {
+                            pic = pic.substr(0, index);
+                        }
                         pic = pic.substr(pic.lastIndexOf("/") + 1);
                         descCount++;
                         buildDescImg(pic);
@@ -322,7 +331,7 @@ define([
         });
     }
     // 生成证件照
-    function buildPDFImgs(pics) {
+    function buildPDFImgs(pics, noClose) {
         if (pics) {
             var html = "",
                 _pdfFile = $("#pdfFile");
@@ -331,19 +340,21 @@ define([
             pics.forEach((pic) => {
                 var _img = $(`<div class="img" id="${pic}">
                             <div class="img-content"><img src="${base.getImg(pic, SUFFIX)}"></div>
-                            <i class="close-icon"></i>
+                            ${noClose?'':'<i class="close-icon"></i>'}
                         </div>`);
-                (function(_img, pic){
-                    _img.find('.close-icon').on('click', function (e) {
-                        _img.remove();
-                        var pics = _pdfFile.data("pic").split("||");
-                        pics.splice(pics.indexOf(pic), 1);
-                        pics = pics.length ? pics.join("||") : "";
-                        _pdfFile.data("pic", pics);
-                        pdfCount--;
-                        hideOrShowContainer(PDF, 'pdfWrapper');
-                    });
-                })(_img, pic)
+                if (!noClose) {
+                    (function(_img, pic){
+                        _img.find('.close-icon').on('click', function (e) {
+                            _img.remove();
+                            var pics = _pdfFile.data("pic").split("||");
+                            pics.splice(pics.indexOf(pic), 1);
+                            pics = pics.length ? pics.join("||") : "";
+                            _pdfFile.data("pic", pics);
+                            pdfCount--;
+                            hideOrShowContainer(PDF, 'pdfWrapper');
+                        });
+                    })(_img, pic)
+                }
                 _img.insertBefore("#pdfWrapper");
             });
         }
