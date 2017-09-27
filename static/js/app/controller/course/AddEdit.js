@@ -2,10 +2,11 @@ define([
     'app/controller/base',
     'app/interface/CourseCtr',
     'app/interface/UserCtr',
+    'app/interface/GeneralCtr',
     'app/module/validate'
-], function(base, CourseCtr, UserCtr, Validate) {
+], function(base, CourseCtr, UserCtr, GeneralCtr, Validate) {
     var code = base.getUrlParam("code");
-    var course, coachCode;
+    var course, coachCode, maxPrice;
 
     init();
     function init(){
@@ -13,18 +14,28 @@ define([
         if(code) {
             $.when(
                 getCoachByUserId(),
+                getMaxPrice(),
                 getCourse()
             ).then(() => {
                 base.hideLoading();
                 addListener();
             });
         } else {
-            getCoachByUserId().then(() => {
+            $.when(
+                getCoachByUserId(),
+                getMaxPrice()
+            ).then(() => {
                 base.hideLoading();
                 $("#week").text($("#skCycle").find("option:selected").text());
                 addListener();
             });
         }
+    }
+    function getMaxPrice() {
+        return GeneralCtr.getBizSysConfig('courseMaxPrice').then((data) => {
+            maxPrice = +data.cvalue;
+            $("#price").attr('placeholder', `课程价格不能超过${maxPrice}元`);
+        });
     }
     // 根据userId详情查询私教
     function getCoachByUserId(userId, refresh) {
@@ -101,6 +112,12 @@ define([
                 _skEndDatetime.valid();
             }
         }).val(`${skEndDatetime[0]} : ${skEndDatetime[1]}`);
+
+        $.validator.addMethod("maxP", function(value, element) {
+            value = +value;
+            return value <= maxPrice;
+        }, '价格不能超过' + maxPrice + '元');
+
         var _formWrapper = $("#formWrapper");
         _formWrapper.validate({
             'rules': {
@@ -119,10 +136,10 @@ define([
                 },
                 price: {
                     required: true,
-                    amount: true
+                    amount: true,
+                    maxP: true
                 }
-            },
-            onkeyup: false
+            }
         });
         $("#saveBtn").click(function(){
             if(_formWrapper.valid()){
