@@ -59,7 +59,7 @@ define([
                 } else if(data.status == "2") {
                     $("#cancelOrder, #startOrder").removeClass("hidden");
                 } else if(data.status == 3) {
-                    $("#writeReport").removeClass("hidden");
+                    $("#cancelOrder, #writeReport").removeClass("hidden");
                 } else {
                     if (data.sizeDataList.length) {
                         sizeDataList = data.sizeDataList;
@@ -99,7 +99,7 @@ define([
             var str = '确定取消订单吗？';
             if (status != '1') {
                 str += `<div style="font-size: 12px;color: #999;padding-top: 4px;">
-                  上课前两小时外取消扣${rate1}订单金额，两小时内取消扣${rate2}订单金额，过了上课时间取消扣${rate3}订单金额</div>`;
+                  上课前两小时外取消扣${rate1}订单金额，两小时内取消扣${rate2}订单金额，上课后取消扣${rate3}订单金额</div>`;
             }
             base.confirm(str, "取消", "确认")
                 .then(() => {
