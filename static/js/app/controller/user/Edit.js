@@ -5,9 +5,8 @@ define([
     'app/module/qiniu',
     'app/module/validate',
     'app/module/clipImg',
-    'app/module/picker',
-    'node_modules/exif-js/exif'
-], function(base, GeneralCtr, UserCtr, qiniu, Validate, clipImg, picker, EXIF) {
+    'app/module/picker'
+], function(base, GeneralCtr, UserCtr, qiniu, Validate, clipImg, picker) {
     var code, coachLabel, status, token;
     const PDF = 'PDF', ADV_PIC = 'ADV_PIC', DESC = 'DESC', AVATAR = 'AVATAR';
     var SUFFIX = "?imageMogr2/auto-orient/thumbnail/!200x200r";
