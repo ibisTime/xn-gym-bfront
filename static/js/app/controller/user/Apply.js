@@ -9,7 +9,7 @@ define([
     'app/module/picker'
 ], function(base, GeneralCtr, UserCtr, qiniu, Validate, alertModal, clipImg, picker) {
     const SUFFIX = "?imageMogr2/auto-orient/thumbnail/!200x200r";
-    const PDF = 'PDF', ADV_PIC = 'ADV_PIC', DESC = 'DESC', AVATAR = 'AVATAR';
+    const ID = 'ID', PDF = 'PDF', ADV_PIC = 'ADV_PIC', DESC = 'DESC', AVATAR = 'AVATAR';
     var token;
     var currentItem;
 
@@ -39,6 +39,7 @@ define([
         return qiniu.getQiniuToken()
             .then((data) => {
                 token = data.uploadToken;
+                initImgUpload(ID);
                 initImgUpload(PDF);
                 initImgUpload(ADV_PIC);
                 initImgUpload(DESC);
@@ -46,7 +47,10 @@ define([
     }
     function initImgUpload(type) {
         var _fileInput, btnId, containerId, count = 0;
-        if (type === ADV_PIC) {
+        if(type === ID) {
+            btnId = 'idFile';
+            containerId = 'idWrapper';
+        }else if(type === ADV_PIC) {
            btnId = 'advPicFile';
            containerId = 'advPicWrapper';
         } else if (type === PDF) {
@@ -111,7 +115,20 @@ define([
         if (type === AVATAR) {
             return;
         }
-        if (type === PDF) {
+
+        if (type === ID) {
+            if (count >= 2) {
+                _container.css({
+                  'visibility': 'hidden',
+                  'position': 'absolute'
+                });
+            } else {
+                _container.css({
+                  'visibility': 'visible',
+                  'position': 'relative'
+                });
+            }
+        } else if (type === PDF) {
             if (count >= 1) {
                 _container.css({
                   'visibility': 'hidden',
@@ -350,6 +367,12 @@ define([
             return;
         }
         param.pic = pic;
+        var id = $("#idFile").data("pic");
+        if(!id) {
+            base.showMsg("身份证正、反面照片不能为空");
+            return;
+        }
+        param.idPhoto = id;
         var pdf = $("#pdfFile").data("pic");
         if(!pdf) {
             base.showMsg("教练资格证书照不能为空");

@@ -8,9 +8,9 @@ define([
     'app/module/picker'
 ], function(base, GeneralCtr, UserCtr, qiniu, Validate, clipImg, picker) {
     var code, coachLabel, status, token;
-    const PDF = 'PDF', ADV_PIC = 'ADV_PIC', DESC = 'DESC', AVATAR = 'AVATAR';
+    const ID = 'ID', PDF = 'PDF', ADV_PIC = 'ADV_PIC', DESC = 'DESC', AVATAR = 'AVATAR';
     var SUFFIX = "?imageMogr2/auto-orient/thumbnail/!200x200r";
-    var advCount = 0, descCount = 0, avatarCount = 0, pdfCount = 0;
+    var advCount = 0, descCount = 0, avatarCount = 0, pdfCount = 0, idCount = 0;
     var currentItem, _addr;
     var rules = {
         age: {
@@ -84,6 +84,9 @@ define([
         } else if (type === DESC) {
             btnId = 'descFile';
             containerId = 'descWrapper';
+        } else if (type === ID) {
+            btnId = 'idFile';
+            containerId = 'idWrapper';
         } else if (type === PDF) {
             btnId = 'pdfFile';
             containerId = 'pdfWrapper';
@@ -111,6 +114,8 @@ define([
                     advCount++;
                 } else if (type === PDF) {
                     pdfCount++;
+                } else if (type === ID) {
+                    idCount++;
                 } else {
                     descCount++;
                 }
@@ -124,6 +129,8 @@ define([
                               advCount--;
                           } else if (type === PDF) {
                               pdfCount--;
+                          } else if (type === ID) {
+                              idCount--;
                           } else {
                               descCount--;
                           }
@@ -166,6 +173,8 @@ define([
             count = advCount;
         } else if (type === PDF) {
             count = pdfCount;
+        } else if (type === ID) {
+            count = idCount;
         } else {
             count = descCount;
         }
@@ -183,6 +192,18 @@ define([
             }
         } else if (type === PDF) {
             if (count >= 1) {
+                $('#' + containerId).css({
+                  'visibility': 'hidden',
+                  'position': 'absolute'
+                });
+            } else {
+                _container.css({
+                  'visibility': 'visible',
+                  'position': 'relative'
+                });
+            }
+        } else if (type === ID) {
+            if (count >= 2) {
                 $('#' + containerId).css({
                   'visibility': 'hidden',
                   'position': 'absolute'
@@ -231,6 +252,10 @@ define([
                     initImgUpload(PDF);
                     $("#pdfFile").data("pic", data.pdf);
                     buildPDFImgs(data.pdf);
+                    $("#idWrapper").removeClass('hidden');
+                    initImgUpload(ID);
+                    $("#idFile").data("pic", data.idPhoto);
+                    buildIDImgs(data.idPhoto);
                     if (data.remark) {
                       $("#remark").text(data.remark).parent().removeClass("hidden");
                     }
@@ -239,6 +264,11 @@ define([
                         buildPDFImgs(data.pdf, true);
                     } else {
                         $('#pdfOutWrapper').addClass('hidden');
+                    }
+                    if (data.idPhoto) {
+                        buildIDImgs(data.idPhoto, true);
+                    } else {
+                        $('#idOutWrapper').addClass('hidden');
                     }
                     $("#realName").remove();
                     $("#realName1").text(data.realName);
@@ -294,6 +324,7 @@ define([
                 hideOrShowContainer(DESC, 'descWrapper');
                 hideOrShowContainer(AVATAR, 'avatarWrapper');
                 hideOrShowContainer(PDF, 'pdfWrapper');
+                hideOrShowContainer(ID, 'idWrapper');
             }, (error, d) => {
                 d && d.close();
                 base.confirm("您需要先完善个人资料并在通过审核后，<br/>才可以使用本系统")
@@ -355,6 +386,35 @@ define([
                     })(_img, pic)
                 }
                 _img.insertBefore("#pdfWrapper");
+            });
+        }
+    }
+    // 生成身份证照
+    function buildIDImgs(pics, noClose) {
+        if (pics) {
+            var html = "",
+                _idFile = $("#idFile");
+            pics = pics.split("||");
+            idCount = pics.length;
+            pics.forEach((pic) => {
+                var _img = $(`<div class="img" id="${pic}">
+                            <div class="img-content"><img src="${base.getImg(pic, SUFFIX)}"></div>
+                            ${noClose?'':'<i class="close-icon"></i>'}
+                        </div>`);
+                if (!noClose) {
+                    (function(_img, pic){
+                        _img.find('.close-icon').on('click', function (e) {
+                            _img.remove();
+                            var pics = _idFile.data("pic").split("||");
+                            pics.splice(pics.indexOf(pic), 1);
+                            pics = pics.length ? pics.join("||") : "";
+                            _idFile.data("pic", pics);
+                            idCount--;
+                            hideOrShowContainer(ID, 'idWrapper');
+                        });
+                    })(_img, pic)
+                }
+                _img.insertBefore("#idWrapper");
             });
         }
     }
@@ -555,6 +615,12 @@ define([
                 return;
             }
             param.pdf = pdfPics;
+            var idPics = $("#idFile").data("pic");
+            if (!idPics) {
+                base.showMsg("教练资格证书不能为空");
+                return;
+            }
+            param.idPhoto = idPics;
         }
         var pic = $("#avatar").data("pic");
         if(!pic) {

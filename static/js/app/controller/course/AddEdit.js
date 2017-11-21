@@ -3,8 +3,9 @@ define([
     'app/interface/CourseCtr',
     'app/interface/UserCtr',
     'app/interface/GeneralCtr',
-    'app/module/validate'
-], function(base, CourseCtr, UserCtr, GeneralCtr, Validate) {
+    'app/module/validate',
+    'app/module/datePicker'
+], function(base, CourseCtr, UserCtr, GeneralCtr, Validate, datePicker) {
     var code = base.getUrlParam("code");
     var course, coachCode, maxPrice;
 
@@ -50,12 +51,25 @@ define([
             .then((data) => {
                 course = data;
                 $("#skCycle").val(data.skCycle);
-                $("#week").text($("#skCycle").find("option:selected").text());
+                // $("#week").text($("#skCycle").find("option:selected").text());
+                $("#skDate").val(base.formatDate(data.skEndDatetime, "yyyy年MM月dd日"));
                 $("#price").val(base.formatMoney(data.price));
                 $("#totalNum").val(data.totalNum);
             });
     }
     function addListener(){
+        datePicker.init({
+          id: '#skDate',
+          select: function(year, month, day) {
+            var _nameEl = $("#skDate");
+                _nameEl.val(year + ' ' + month + ' ' + day);
+                _nameEl.attr("data-year", year);
+                _nameEl.attr("data-month", month);
+                _nameEl.attr("data-day", day);
+          }
+        });
+
+        var now = new Date();
         var hours = ['00', '01', '02', '03', '04', '05', '06', '07',
                 '08', '09', '10', '11', '12', '13', '14', '15', '16',
                 '17', '18', '19', '20', '21', '22', '23'],
@@ -67,15 +81,18 @@ define([
                 '44', '45', '46', '47', '48', '49', '50', '51', '52',
                 '53', '54', '55', '56', '57', '58', '59'];
 
-        var skStartDatetime, skEndDatetime;
+        var skStartDatetime, skEndDatetime, skDate;
         if(course) {
-            skStartDatetime = course.skStartDatetime.substr(0,5).split(":");
-            skEndDatetime = course.skEndDatetime.substr(0,5).split(":");
+            // skStartDatetime = course.skStartDatetime.substr(0,5).split(":");
+            // skEndDatetime = course.skEndDatetime.substr(0,5).split(":");
+            skStartDatetime = base.formatDate(course.skStartDatetime, "hh:mm").split(":");
+            skEndDatetime = base.formatDate(course.skEndDatetime, "hh:mm").split(":")
+            skDate = base.formatDate(course.skEndDatetime, "yyyy年MM月dd日")
         } else {
             skStartDatetime = ["00", "00"];
             skEndDatetime = ["00", "00"];
+            skDate = ["0000", "00", "00"];
         }
-
         var _skStartDatetime = $("#skStartDatetime");
         _skStartDatetime.picker({
             title: "请选择上课时间",
@@ -124,6 +141,9 @@ define([
                 skCycle: {
                     required: true
                 },
+                skDate: {
+                    required: true
+                },
                 skStartDatetime: {
                     required: true
                 },
@@ -152,6 +172,8 @@ define([
     }
     // 提交数据前的校验和拼装
     function beforeSubmit(param) {
+        var _skDate = $("#skDate").val().replace('年','-').replace('月','-').replace('日','').replace(/\s/ig,'');
+        // _skDate = base.formatDate(_skDate, "yyyy-MM-dd");
         var skStartDatetime = param.skStartDatetime.split(/\s:\s/);
         skStartDatetime.push("00");
         var skEndDatetime = param.skEndDatetime.split(/\s:\s/);
@@ -161,8 +183,8 @@ define([
             return;
         }
         base.showLoading("保存中...");
-        param.skStartDatetime = skStartDatetime.join(":");
-        param.skEndDatetime = skEndDatetime.join(":");
+        param.skStartDatetime = _skDate + " " + skStartDatetime.join(":");
+        param.skEndDatetime = _skDate + " " + skEndDatetime.join(":");
         param.coachCode = coachCode;
         param.price = +param.price * 1000;
         if(code) {
